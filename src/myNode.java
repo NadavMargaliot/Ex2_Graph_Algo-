@@ -12,6 +12,7 @@ public class myNode implements NodeData {
         this.key = id++;
         this.info = null;
         this.tag = 0;
+        this.location = new myGeo();
 
     }
 
@@ -22,11 +23,12 @@ public class myNode implements NodeData {
 
     @Override
     public GeoLocation getLocation() {
-        return null;
+        return this.location;
     }
 
     @Override
     public void setLocation(GeoLocation p) {
+        this.location = p;
 
     }
 
@@ -42,21 +44,23 @@ public class myNode implements NodeData {
 
     @Override
     public String getInfo() {
-        return null;
+        return this.info;
     }
 
     @Override
     public void setInfo(String s) {
+        this.info = s;
 
     }
 
     @Override
     public int getTag() {
-        return 0;
+        return this.tag;
     }
 
     @Override
     public void setTag(int t) {
+        this.tag = t;
 
     }
 }
