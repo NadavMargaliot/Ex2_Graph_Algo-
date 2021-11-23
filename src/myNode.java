@@ -2,11 +2,22 @@ import api.GeoLocation;
 import api.NodeData;
 
 public class myNode implements NodeData {
-    private int id;
+    private static int id = 0;
+    private int key;
+    private GeoLocation location;
+    private String info;
+    private int tag;
+
+    public myNode(){
+        this.key = id++;
+        this.info = null;
+        this.tag = 0;
+
+    }
 
     @Override
     public int getKey() {
-        return 0;
+        return this.key;
     }
 
     @Override
