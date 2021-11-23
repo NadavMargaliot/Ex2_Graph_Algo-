@@ -9,16 +9,12 @@ public class myNode implements NodeData {
     private GeoLocation location;
     private String info;
     private int tag;
-    private HashMap<Integer, myNode> neighbors;
-    private HashMap<Integer, myNode> edges;
 
     public myNode() {
         this.key = id++;
         this.info = null;
         this.tag = 0;
         this.location = new myGeo();
-        this.neighbors = new HashMap<>();
-        this.edges = new HashMap<>();
     }
 
     public myNode(int key) {
@@ -26,8 +22,6 @@ public class myNode implements NodeData {
         this.info = null;
         this.tag = 0;
         this.location = new myGeo();
-        this.neighbors = new HashMap<>();
-        this.edges = new HashMap<>();
     }
     public myNode (myNode other){
         if (other != null){
@@ -35,8 +29,6 @@ public class myNode implements NodeData {
             this.info = other.info;
             this.tag = other.tag;
             this.location = other.location;
-            this.neighbors = new HashMap<>();
-            this.edges = new HashMap<>();
         }
     }
 
@@ -85,6 +77,5 @@ public class myNode implements NodeData {
     @Override
     public void setTag(int t) {
         this.tag = t;
-
     }
 }
