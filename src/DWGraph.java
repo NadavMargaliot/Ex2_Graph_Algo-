@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class DWGraph implements DirectedWeightedGraph {
-    private HashMap<Integer, myNode> vertices;
-    private HashMap<Integer, HashMap<Integer, myEdge>> neighbors;
+    private HashMap<Integer, NodeData> vertices;
+    private HashMap<Integer, HashMap<Integer, EdgeData>> neighbors;
     private int MC = 0;
     private int edgeSize = 0;
     private int nodeSize = 0;
@@ -67,7 +67,7 @@ public class DWGraph implements DirectedWeightedGraph {
     @Override
     public void addNode(NodeData n) {
         if (!this.vertices.containsKey(n.getKey())) {
-            this.vertices.put(n.getKey(), (myNode) n);
+            this.vertices.put(n.getKey(), n);
             this.neighbors.put(n.getKey(), new HashMap<>());
             this.MC++;
             this.nodeSize++;
@@ -78,7 +78,7 @@ public class DWGraph implements DirectedWeightedGraph {
     public void connect(int src, int dest, double w) {
         if (src != dest && w > 0) {
             if (this.vertices.containsKey(src) && this.vertices.containsKey(dest)) {
-                myEdge newEdge = new myEdge(src, dest, w);
+                EdgeData newEdge = new myEdge(src, dest, w);
                 this.neighbors.get(src).put(dest, newEdge);
                 this.MC++;
                 this.edgeSize++;
@@ -90,7 +90,7 @@ public class DWGraph implements DirectedWeightedGraph {
 
     @Override
     public Iterator<NodeData> nodeIter() {
-        return null;
+        return this.vertices.values().iterator();
     }
 
     @Override
@@ -105,7 +105,18 @@ public class DWGraph implements DirectedWeightedGraph {
 
     @Override
     public NodeData removeNode(int key) {
-        return null;
+        if(!vertices.containsKey(key)){
+            return null;
+        }
+        NodeData tmp = this.vertices.get(key);
+        this.vertices.remove(key);
+        this.nodeSize--;
+        for(Integer k : this.neighbors.get(key).keySet()){
+            this.neighbors.get(key).remove(k);
+            this.edgeSize--;
+        }
+
+        return tmp;
     }
 
     @Override
@@ -113,7 +124,7 @@ public class DWGraph implements DirectedWeightedGraph {
         if(!edgeBetween(src , dest)){
             return null;
         }
-        myEdge tmp = this.neighbors.get(src).get(dest);
+        EdgeData tmp = this.neighbors.get(src).get(dest);
         this.neighbors.get(src).remove(dest);
         this.edgeSize--;
         MC++;
@@ -132,6 +143,6 @@ public class DWGraph implements DirectedWeightedGraph {
 
     @Override
     public int getMC() {
-        return 0;
+        return this.MC;
     }
 }

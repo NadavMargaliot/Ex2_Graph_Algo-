@@ -1,12 +1,13 @@
+import api.NodeData;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class DWGraphTest {
     DWGraph g = new DWGraph();
-    myNode node1 = new myNode(1);
-    myNode node2 = new myNode(2);
-    myNode node3 = new myNode(3);
+    NodeData node1 = new myNode(1);
+    NodeData node2 = new myNode(2);
+    NodeData node3 = new myNode(3);
 
 
 
@@ -23,7 +24,7 @@ class DWGraphTest {
     @Test
     void getEdge() {
         DWGraph a = new DWGraph();
-        myNode tmp = new myNode(node1.getKey());
+        NodeData tmp = new myNode(node1.getKey());
         a.addNode(node1);
         a.addNode(node2);
         assertNull(a.getEdge(node1.getKey() , tmp.getKey()));
