@@ -1,8 +1,6 @@
 import api.GeoLocation;
 import api.NodeData;
 
-import java.util.HashMap;
-
 public class myNode implements NodeData {
     private static int id = 0;
     private int key;
