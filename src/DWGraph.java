@@ -2,45 +2,61 @@ import api.DirectedWeightedGraph;
 import api.EdgeData;
 import api.NodeData;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
 public class DWGraph implements DirectedWeightedGraph {
     private HashMap<Integer, myNode> vertices;
-    private HashMap<Integer, HashMap<Integer , myEdge>> edges;
+    private HashMap<Integer, HashMap<Integer, myEdge>> neighbors;
     private int MC = 0;
+    private int edgeSize = 0;
+    private int nodeSize = 0;
 
-    public DWGraph(){
+    public DWGraph() {
         this.vertices = new HashMap<>();
-        this.edges = new HashMap<>();
+        this.neighbors = new HashMap<>();
     }
 
-//    public DWGraph(Collections verts , Collections edges){
+//    public DWGraph(HashMap<Integer, myNode> vertices , HashMap<Integer, HashMap<Integer , myEdge>> edges){
+//        for(Map.Entry<Integer , myNode> entry : vertices.entrySet()){
+//            this.vertices.put(entry.getKey(), entry.getValue());
+//        }
+//        for(Map.Entry<Integer,HashMap<Integer , myEdge>> entry : edges){
+////            this.edges.put(entry.getKey() , entry.getValue());
+//        }
+
+
 //        for(myNode node : verts){
 //            this.vertices.put(node.getKey() , node);
 //        }
 ////        for(myEdge edge: edges){
-////            this.edges.put()
-////        }
+//////            this.edges.put()
+//////        }
 //    }
 
     @Override
     public NodeData getNode(int key) {
-        if (this.vertices.containsKey(key)){
+        if (this.vertices.containsKey(key)) {
             return vertices.get(key);
         }
         return null;
     }
 
+    public boolean edgeBetween(int src, int dest) {
+        if (this.neighbors.get(src) == null || this.neighbors.get(src).get(dest) == null) {
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public EdgeData getEdge(int src, int dest) {
-        if(src == dest || (vertices.get(src) == null || vertices.get(dest) == null)){
+        if (src == dest || (vertices.get(src) == null || vertices.get(dest) == null)) {
             return null;
         }
-        if(edges.containsKey(src)){
-            if(edges.get(src).containsKey(dest)){
-                return edges.get(src).get(dest);
+        if (neighbors.containsKey(src)) {
+            if (neighbors.get(src).containsKey(dest)) {
+                return neighbors.get(src).get(dest);
             }
         }
         return null;
@@ -50,14 +66,24 @@ public class DWGraph implements DirectedWeightedGraph {
 
     @Override
     public void addNode(NodeData n) {
-        if(!this.vertices.containsKey(n.getKey())){
-            this.vertices.put(n.getKey() , (myNode)n);
-            MC++;
+        if (!this.vertices.containsKey(n.getKey())) {
+            this.vertices.put(n.getKey(), (myNode) n);
+            this.neighbors.put(n.getKey(), new HashMap<>());
+            this.MC++;
+            this.nodeSize++;
         }
     }
 
     @Override
     public void connect(int src, int dest, double w) {
+        if (src != dest && w > 0) {
+            if (this.vertices.containsKey(src) && this.vertices.containsKey(dest)) {
+                myEdge newEdge = new myEdge(src, dest, w);
+                this.neighbors.get(src).put(dest, newEdge);
+                this.MC++;
+                this.edgeSize++;
+            }
+        }
 
 
     }
