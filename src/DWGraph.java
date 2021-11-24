@@ -110,17 +110,24 @@ public class DWGraph implements DirectedWeightedGraph {
 
     @Override
     public EdgeData removeEdge(int src, int dest) {
-        return null;
+        if(!edgeBetween(src , dest)){
+            return null;
+        }
+        myEdge tmp = this.neighbors.get(src).get(dest);
+        this.neighbors.get(src).remove(dest);
+        this.edgeSize--;
+        MC++;
+        return tmp;
     }
 
     @Override
     public int nodeSize() {
-        return 0;
+        return this.nodeSize;
     }
 
     @Override
     public int edgeSize() {
-        return 0;
+        return this.edgeSize;
     }
 
     @Override

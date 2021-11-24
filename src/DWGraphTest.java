@@ -23,8 +23,10 @@ class DWGraphTest {
     @Test
     void getEdge() {
         DWGraph a = new DWGraph();
+        myNode tmp = new myNode(node1.getKey());
         a.addNode(node1);
         a.addNode(node2);
+        assertNull(a.getEdge(node1.getKey() , tmp.getKey()));
         assertNull(a.getEdge(node1.getKey(),node2.getKey()));
         a.connect(node1.getKey() , node2.getKey() , 3);
         assertEquals(3 , a.getEdge(node1.getKey() , node2.getKey()).getWeight());
@@ -36,10 +38,10 @@ class DWGraphTest {
         assertEquals(0 , g1.nodeSize());
         g1.addNode(node1);
         assertEquals(1 , g1.nodeSize());
-//        g1.addNode(node1);
-//        assertEquals(1 , g1.nodeSize());
-//        g1.addNode(node2);
-//        assertEquals(2 , g1.nodeSize());
+        g1.addNode(node1);
+        assertEquals(1 , g1.nodeSize());
+        g1.addNode(node2);
+        assertEquals(2 , g1.nodeSize());
 
 
     }
@@ -73,6 +75,16 @@ class DWGraphTest {
 
     @Test
     void removeEdge() {
+        DWGraph a = new DWGraph();
+        a.addNode(node1);
+        a.addNode(node2);
+        assertFalse(a.edgeBetween(node1.getKey() , node2.getKey()));
+        a.connect(node1.getKey() , node2.getKey() , 3);
+        assertTrue(a.edgeBetween(node1.getKey() , node2.getKey()));
+        assertEquals(1 , a.edgeSize());
+        a.removeEdge(node1.getKey() , node2.getKey());
+        assertFalse(a.edgeBetween(node1.getKey() , node2.getKey()));
+        assertEquals(0 , a.edgeSize());
     }
 
     @Test
