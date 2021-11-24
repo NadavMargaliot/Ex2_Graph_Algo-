@@ -8,11 +8,18 @@ public class myNode implements NodeData {
     private String info;
     private int tag;
 
+
     public myNode() {
         this.key = id++;
         this.info = null;
         this.tag = 0;
         this.location = new myGeo();
+    }
+    public myNode(int key , String info , int tag , GeoLocation location){
+        this.key = key;
+        this.info = info;
+        this.tag = tag;
+        this.location = location;
     }
 
     public myNode(int key) {

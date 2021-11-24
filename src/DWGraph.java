@@ -12,12 +12,19 @@ public class DWGraph implements DirectedWeightedGraph {
 
     @Override
     public NodeData getNode(int key) {
+        if (this.vertices.containsKey(key)){
+            return vertices.get(key);
+        }
         return null;
     }
 
     @Override
     public EdgeData getEdge(int src, int dest) {
+        if(src == dest || (vertices.get(src) == null || vertices.get(dest) == null)){
+            return null;
+        }
         return null;
+
     }
 
     @Override

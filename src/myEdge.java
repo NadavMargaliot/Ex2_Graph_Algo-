@@ -14,6 +14,15 @@ public class myEdge implements EdgeData {
         this.tag = tag;
         this.info = info;
     }
+
+    public myEdge(int src , int dest , double weight){
+        this.src = src;
+        this.dest = dest;
+        this.weight = weight;
+        this.tag = 0;
+        this.info = null;
+    }
+
     @Override
     public int getSrc() {
         return this.src;
