@@ -103,7 +103,7 @@ public class DWGraph implements DirectedWeightedGraph {
         Iterator it = set.iterator();
         while(it.hasNext()){
             int representIt = (int) it.next();
-            if(getEdge(representIt , key) != null){
+            if(edgeBetween(representIt , key)){
                 removeEdge(representIt , key);
             }
         }
