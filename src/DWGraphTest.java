@@ -90,10 +90,37 @@ class DWGraphTest {
 
     @Test
     void nodeSize() {
+        DWGraph a = new DWGraph();
+        assertEquals(0 , a.nodeSize());
+        a.addNode(node1);
+        assertEquals(1 , a.nodeSize());
+        a.addNode(node2);
+        assertEquals(2 , a.nodeSize());
+        a.removeNode(2);
+        assertEquals(1 , a.nodeSize());
+        a.removeNode(2);
+        assertEquals(1 , a.nodeSize());
+        a.removeNode(1);
+        assertEquals(0 , a.nodeSize());
     }
 
     @Test
     void edgeSize() {
+        DWGraph a = new DWGraph();
+        assertEquals(0 , a.edgeSize());
+        a.addNode(node1);
+        a.addNode(node2);
+        a.connect(node1.getKey() , node2.getKey() , 3);
+        assertEquals(1 , a.edgeSize());
+        a.connect(node2.getKey() , node1.getKey() , 4);
+        assertEquals(2 , a.edgeSize());
+        a.removeEdge(1,5);
+        assertEquals(2 , a.edgeSize());
+        a.removeEdge(1,2);
+        assertEquals(1 , a.edgeSize());
+        a.removeEdge(2,1);
+        assertEquals(0 , a.edgeSize());
+
     }
 
     @Test

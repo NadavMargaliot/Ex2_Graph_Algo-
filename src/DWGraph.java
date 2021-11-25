@@ -17,22 +17,6 @@ public class DWGraph implements DirectedWeightedGraph {
         this.neighbors = new HashMap<>();
     }
 
-//    public DWGraph(HashMap<Integer, myNode> vertices , HashMap<Integer, HashMap<Integer , myEdge>> edges){
-//        for(Map.Entry<Integer , myNode> entry : vertices.entrySet()){
-//            this.vertices.put(entry.getKey(), entry.getValue());
-//        }
-//        for(Map.Entry<Integer,HashMap<Integer , myEdge>> entry : edges){
-////            this.edges.put(entry.getKey() , entry.getValue());
-//        }
-
-
-//        for(myNode node : verts){
-//            this.vertices.put(node.getKey() , node);
-//        }
-////        for(myEdge edge: edges){
-//////            this.edges.put()
-//////        }
-//    }
 
     @Override
     public NodeData getNode(int key) {
