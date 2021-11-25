@@ -1,5 +1,8 @@
+import api.EdgeData;
 import api.NodeData;
 import org.junit.jupiter.api.Test;
+
+import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,6 +61,17 @@ class DWGraphTest {
 
     @Test
     void edgeIter() {
+        DWGraph a = new DWGraph();
+        a.addNode(node1);
+        a.addNode(node2);
+        a.addNode(node3);
+        a.connect(node1.getKey() , node2.getKey() , 10);
+        a.connect(node3.getKey() , node1.getKey() , 25);
+        a.connect(node3.getKey() , node2.getKey() , 31);
+        Iterator<EdgeData> iter = a.edgeIter();
+        while(iter.hasNext()){
+            System.out.println(iter.next().getWeight());
+        }
     }
 
     @Test

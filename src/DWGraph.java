@@ -2,6 +2,7 @@ import api.DirectedWeightedGraph;
 import api.EdgeData;
 import api.NodeData;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -80,8 +81,24 @@ public class DWGraph implements DirectedWeightedGraph {
 
     @Override
     public Iterator<EdgeData> edgeIter() {
-        return null;
+        ArrayList<EdgeData> edgeDataArrayList = new ArrayList<>();
+        Set<Integer> sourceSet = this.neighbors.keySet();
+        Iterator<Integer> iterSource = sourceSet.iterator();
+        for(Object i : sourceSet) {
+            int tmpSource = iterSource.next();
+            if (this.neighbors.get(tmpSource) != null) {
+                Set<Integer> destSet = this.neighbors.get(tmpSource).keySet();
+                Iterator<Integer> iterDest = destSet.iterator();
+                for(Object j : destSet) {
+                    int tmpDest = iterDest.next();
+                    edgeDataArrayList.add(this.neighbors.get(tmpSource).get(tmpDest));
+                }
+            }
+        }
+        return edgeDataArrayList.iterator();
     }
+
+
 
     @Override
     public Iterator<EdgeData> edgeIter(int node_id) {
@@ -90,7 +107,7 @@ public class DWGraph implements DirectedWeightedGraph {
 
     @Override
     public NodeData removeNode(int key) {
-        if(!vertices.containsKey(key)){
+        if (!vertices.containsKey(key)) {
             return null;
         }
         NodeData tmp = this.vertices.get(key);
@@ -99,21 +116,20 @@ public class DWGraph implements DirectedWeightedGraph {
         int size = this.neighbors.get(key).size();
         this.neighbors.remove(key);
         this.edgeSize -= size;
-        Set set = this.neighbors.keySet();
-        Iterator it = set.iterator();
-        while(it.hasNext()){
-            int representIt = (int) it.next();
-            if(edgeBetween(representIt , key)){
-                removeEdge(representIt , key);
+        Set<Integer> sourceSet = this.neighbors.keySet();
+        Iterator<Integer> it = sourceSet.iterator();
+        for(Object i : sourceSet) {
+            int representIt = it.next();
+            if (edgeBetween(representIt, key)) {
+                removeEdge(representIt, key);
             }
         }
-
         return tmp;
     }
 
     @Override
     public EdgeData removeEdge(int src, int dest) {
-        if(!edgeBetween(src , dest)){
+        if (!edgeBetween(src, dest)) {
             return null;
         }
         EdgeData tmp = this.neighbors.get(src).get(dest);
