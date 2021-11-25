@@ -4,6 +4,7 @@ import api.NodeData;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 
 public class DWGraph implements DirectedWeightedGraph {
     private HashMap<Integer, NodeData> vertices;
@@ -84,7 +85,7 @@ public class DWGraph implements DirectedWeightedGraph {
 
     @Override
     public Iterator<EdgeData> edgeIter(int node_id) {
-        return null;
+        return this.neighbors.get(node_id).values().iterator();
     }
 
     @Override
@@ -95,9 +96,16 @@ public class DWGraph implements DirectedWeightedGraph {
         NodeData tmp = this.vertices.get(key);
         this.vertices.remove(key);
         this.nodeSize--;
-        for(Integer k : this.neighbors.get(key).keySet()){
-            this.neighbors.get(key).remove(k);
-            this.edgeSize--;
+        int size = this.neighbors.get(key).size();
+        this.neighbors.remove(key);
+        this.edgeSize -= size;
+        Set set = this.neighbors.keySet();
+        Iterator it = set.iterator();
+        while(it.hasNext()){
+            int representIt = (int) it.next();
+            if(getEdge(representIt , key) != null){
+                removeEdge(representIt , key);
+            }
         }
 
         return tmp;
