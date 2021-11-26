@@ -7,6 +7,7 @@ import java.util.List;
 public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
     private DirectedWeightedGraph graph;
 
+
     @Override
     public void init(DirectedWeightedGraph g) {
         this.graph = g;
