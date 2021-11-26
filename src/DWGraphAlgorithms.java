@@ -1,7 +1,9 @@
 import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
+import api.EdgeData;
 import api.NodeData;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
@@ -15,12 +17,27 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
 
     @Override
     public DirectedWeightedGraph getGraph() {
-        return null;
+        return this.graph;
     }
 
     @Override
     public DirectedWeightedGraph copy() {
-        return null;
+        DirectedWeightedGraph copied = new DWGraph();
+        // adding the vertices to the graph
+        Iterator<NodeData> nodes = this.graph.nodeIter();
+        while (nodes.hasNext()) {
+            copied.addNode(nodes.next());
+        }
+        // adding the edges to the graph and connect them
+        Iterator<EdgeData> edges = this.graph.edgeIter();
+        while (nodes.hasNext()) {
+            int currNode = nodes.next().getKey();
+            while (edges.hasNext()) {
+                EdgeData currEdge = edges.next();
+                copied.connect(currNode, currEdge.getDest(), currEdge.getWeight());
+            }
+        }
+        return copied;
     }
 
     @Override
