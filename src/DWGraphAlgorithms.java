@@ -2,11 +2,9 @@ import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
 import api.EdgeData;
 import api.NodeData;
+import org.w3c.dom.Node;
 
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
     private DirectedWeightedGraph graph;
@@ -101,7 +99,50 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
 
     @Override
     public List<NodeData> shortestPath(int src, int dest) {
-        return null;
+        if (shortestPathDist(src, dest) == -1) {
+            return null;
+        }
+        // each node weight is infinity
+        this.graph.getNode(src).setWeight(0);
+        Comparator<NodeData> lessWeight = new Comparator<>() {
+            @Override
+            public int compare(NodeData node1, NodeData node2) {
+                return Double.compare(node1.getWeight(), node2.getWeight());
+            }
+        };
+        HashMap<NodeData, NodeData> path = new HashMap<>();
+        PriorityQueue<NodeData> sp = new PriorityQueue<>(lessWeight);
+        sp.add(this.graph.getNode(src));
+        while (!sp.isEmpty()) {
+            NodeData currNode = sp.poll();
+            if (!currNode.getInfo().equals("Visited")) {
+                currNode.setInfo("Visited");
+            }
+            Iterator<EdgeData> currNodeIter = this.graph.edgeIter(currNode.getKey());
+            while (currNodeIter.hasNext()) {
+                EdgeData tmpEdge = currNodeIter.next();
+                if (!this.graph.getNode(tmpEdge.getDest()).getInfo().equals("Visited")) {
+                    if (currNode.getWeight() + tmpEdge.getWeight() < this.graph.getNode(tmpEdge.getDest()).getWeight()) {
+                        this.graph.getNode(tmpEdge.getDest()).setWeight(currNode.getWeight() + tmpEdge.getWeight());
+                        path.put(this.graph.getNode(tmpEdge.getDest()), currNode);
+                        sp.add(this.graph.getNode(tmpEdge.getDest()));
+                    }
+                }
+            }
+        }
+        List<NodeData> reversePath = new LinkedList<>();
+        NodeData curr = this.graph.getNode(dest);
+        reversePath.add(curr);
+        while (!reversePath.contains(this.graph.getNode(src))) {
+            NodeData back = path.get(curr);
+            reversePath.add(back);
+            curr = back;
+        }
+        ArrayList<NodeData> resultPath = new ArrayList<>();
+        for (int i = reversePath.size() - 1; i >= 0; i--) {
+            resultPath.add(reversePath.get(i));
+        }
+        return resultPath;
     }
 
     @Override

@@ -1,6 +1,9 @@
 import api.NodeData;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class DWGraphAlgorithmsTest {
@@ -76,6 +79,42 @@ class DWGraphAlgorithmsTest {
 
     @Test
     void shortestPath() {
+        NodeData a = new myNode(1);
+        NodeData b = new myNode(2);
+        NodeData c = new myNode(3);
+        NodeData d = new myNode(4);
+        NodeData e = new myNode(5);
+        NodeData f = new myNode(6);
+        NodeData h = new myNode(8);
+        g.addNode(a);
+        g.addNode(b);
+        g.addNode(c);
+        g.addNode(d);
+        g.addNode(e);
+        g.addNode(f);
+        g.addNode(h);
+        g.connect(a.getKey(),b.getKey() , 3);
+        g.connect(a.getKey(),c.getKey(),2);
+        g.connect(c.getKey(),b.getKey(),2);
+        g.connect(c.getKey(),e.getKey(),3);
+        g.connect(b.getKey(),d.getKey(),4);
+        g.connect(b.getKey(),e.getKey(),1);
+        g.connect(d.getKey(),f.getKey(),1);
+        g.connect(e.getKey(),f.getKey(),2);
+        DWGraphAlgorithms graphAlgorithms = new DWGraphAlgorithms();
+        graphAlgorithms.init(g);
+        ArrayList<NodeData> expected1 = new ArrayList<>();
+        expected1.add(a);
+        expected1.add(b);
+        expected1.add(e);
+        expected1.add(f);
+        ArrayList<NodeData> expected2 = new ArrayList<>();
+        expected2.add(c);
+        expected2.add(e);
+        expected2.add(f);
+        assertEquals(expected1, graphAlgorithms.shortestPath(a.getKey(),f.getKey()));
+        assertEquals(expected2, graphAlgorithms.shortestPath((c.getKey()),f.getKey()));
+        assertNull(graphAlgorithms.shortestPath(a.getKey(),h.getKey()));
     }
 
     @Test
