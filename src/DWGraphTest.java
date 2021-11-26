@@ -1,9 +1,7 @@
 import api.EdgeData;
 import api.NodeData;
 import org.junit.jupiter.api.Test;
-
 import java.util.Iterator;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class DWGraphTest {
@@ -11,7 +9,6 @@ class DWGraphTest {
     NodeData node1 = new myNode(1);
     NodeData node2 = new myNode(2);
     NodeData node3 = new myNode(3);
-
 
 
     @Test
