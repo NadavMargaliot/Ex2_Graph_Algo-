@@ -147,6 +147,9 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
 
     @Override
     public NodeData center() {
+        if(!isConnected()){
+            return null;
+        }
         return null;
     }
 
