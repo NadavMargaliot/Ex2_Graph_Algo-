@@ -42,9 +42,61 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
 
     @Override
     public boolean isConnected() {
-        int nodeSize = this.graph.nodeSize();
-        int edgeSize = this.graph.edgeSize();
-        return (nodeSize * (nodeSize - 1)) == edgeSize;
+        if (this.graph.nodeSize() == 0){
+            return true;
+        }
+        boolean regularGraph = true;
+        boolean reverseGraph = true;
+        Queue<NodeData> regularQueue = new LinkedList<>();
+        Iterator<NodeData> nodes = this.graph.nodeIter();
+        regularQueue.add(nodes.next());
+        while (!regularQueue.isEmpty()) {
+            NodeData regularCurrNode = regularQueue.poll();
+            if (regularCurrNode.getInfo() != "Visited") {
+                regularCurrNode.setInfo("Visited");
+            }
+            Iterator<EdgeData> edgeIter = this.graph.edgeIter(regularCurrNode.getKey());
+            while (edgeIter.hasNext()) {
+                EdgeData currEdge = edgeIter.next();
+                if (this.graph.getNode(currEdge.getDest()).getInfo() != "Visited") {
+                    regularQueue.add(this.graph.getNode(currEdge.getDest()));
+                    this.graph.getNode(currEdge.getDest()).setInfo("Visited");
+                }
+            }
+        }
+        while (nodes.hasNext()) {
+            NodeData tmp = nodes.next();
+            if (tmp.getInfo() != "Visited") {
+                regularGraph = false;
+            }
+            tmp.setInfo("");
+        }
+        DirectedWeightedGraph reverse = reverseGraph();
+        Queue<NodeData> reverseQueue = new LinkedList<>();
+        Iterator<NodeData> reverseNodes = reverse.nodeIter();
+        reverseQueue.add(reverseNodes.next());
+        while (!reverseQueue.isEmpty()) {
+            NodeData reverseCurrNode = reverseQueue.poll();
+            if (reverseCurrNode.getInfo() != "Visited") {
+                reverseCurrNode.setInfo("Visited");
+            }
+            Iterator<EdgeData> reverseEdgeIter = reverse.edgeIter(reverseCurrNode.getKey());
+            while (reverseEdgeIter.hasNext()) {
+                EdgeData reverseCurrEdge = reverseEdgeIter.next();
+                if (reverse.getNode(reverseCurrEdge.getDest()).getInfo() != "Visited") {
+                    reverseQueue.add(reverse.getNode(reverseCurrEdge.getDest()));
+                    reverse.getNode(reverseCurrEdge.getDest()).setInfo("Visited");
+                }
+            }
+        }
+        while (reverseNodes.hasNext()) {
+            NodeData reverseTmp = reverseNodes.next();
+            if (reverseTmp.getInfo() != "Visited") {
+                reverseGraph = false;
+                reverseTmp.setInfo("");
+            }
+        }
+        return regularGraph && reverseGraph;
     }
 
     @Override
@@ -147,7 +199,7 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
 
     @Override
     public NodeData center() {
-        if(!isConnected()){
+        if (!isConnected()) {
             return null;
         }
         return null;
@@ -166,5 +218,20 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
     @Override
     public boolean load(String file) {
         return false;
+    }
+
+    private DirectedWeightedGraph reverseGraph() {
+        Iterator<NodeData> nodes = this.graph.nodeIter();
+        DirectedWeightedGraph reverse = new DWGraph();
+        while (nodes.hasNext()) {
+            NodeData currNode = nodes.next();
+            reverse.addNode(currNode);
+        }
+        Iterator<EdgeData> edges = this.graph.edgeIter();
+        while (edges.hasNext()) {
+            EdgeData currEdge = edges.next();
+            reverse.connect(currEdge.getDest(), currEdge.getSrc(), currEdge.getWeight());
+        }
+        return reverse;
     }
 }

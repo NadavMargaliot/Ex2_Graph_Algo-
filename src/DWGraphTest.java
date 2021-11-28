@@ -50,6 +50,7 @@ class DWGraphTest {
         assertFalse(a.edgeBetween(node1.getKey() , node2.getKey()));
         a.connect(node1.getKey() , node2.getKey() , 3);
         assertTrue(a.edgeBetween(node1.getKey() , node2.getKey()));
+        assertFalse(a.edgeBetween(node2.getKey(),node1.getKey()));
     }
 
     @Test

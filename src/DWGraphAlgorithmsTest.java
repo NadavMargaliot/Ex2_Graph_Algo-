@@ -29,19 +29,44 @@ class DWGraphAlgorithmsTest {
 
     @Test
     void isConnected() {
-        DWGraph a = new DWGraph();
-        a.addNode(node1);
-        a.addNode(node2);
-        a.addNode(node3);
-        a.connect(node1.getKey() , node2.getKey() , 10);
-        a.connect(node1.getKey() , node3.getKey() , 11);
-        a.connect(node3.getKey() , node1.getKey() , 25);
-        a.connect(node3.getKey() , node2.getKey() , 31);
-        a.connect(node2.getKey() , node3.getKey() , 12);
-        a.connect(node2.getKey() , node1.getKey() , 13);
+        DWGraph gr = new DWGraph();
+        gr.addNode(node1);
+        gr.addNode(node2);
+        gr.addNode(node3);
+        gr.connect(node1.getKey() , node2.getKey() , 10);
+        gr.connect(node1.getKey() , node3.getKey() , 11);
+        gr.connect(node3.getKey() , node1.getKey() , 25);
+        gr.connect(node3.getKey() , node2.getKey() , 31);
+        gr.connect(node2.getKey() , node3.getKey() , 12);
+        gr.connect(node2.getKey() , node1.getKey() , 13);
         DWGraphAlgorithms graphAlgorithms = new DWGraphAlgorithms();
-        graphAlgorithms.init(a);
+        graphAlgorithms.init(gr);
         assertTrue(graphAlgorithms.isConnected());
+
+
+        NodeData a = new myNode(1);
+        NodeData b = new myNode(2);
+        NodeData c = new myNode(3);
+        NodeData d = new myNode(4);
+        NodeData e = new myNode(5);
+        g.addNode(a);
+        g.addNode(b);
+        g.addNode(c);
+        g.addNode(d);
+        g.addNode(e);
+        g.connect(a.getKey() , b.getKey() , 1);
+        g.connect(b.getKey() , c.getKey() , 1);
+        g.connect(c.getKey() , d.getKey() , 1);
+        g.connect(d.getKey() , e.getKey() , 1);
+        g.connect(e.getKey() , a.getKey() , 1);
+        g.connect(a.getKey() , d.getKey() , 1);
+        DWGraphAlgorithms graphAlgorithms2 = new DWGraphAlgorithms();
+        graphAlgorithms2.init(g);
+        assertTrue(graphAlgorithms2.isConnected());
+        g.removeEdge(e.getKey(),a.getKey());
+        assertFalse(graphAlgorithms2.isConnected());
+
+
     }
 
     @Test
