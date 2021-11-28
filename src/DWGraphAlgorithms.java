@@ -2,9 +2,13 @@ import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
 import api.EdgeData;
 import api.NodeData;
-import org.w3c.dom.Node;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.*;
+
 
 public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
     private DirectedWeightedGraph graph;
@@ -42,7 +46,7 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
 
     @Override
     public boolean isConnected() {
-        if (this.graph.nodeSize() == 0){
+        if (this.graph.nodeSize() == 0) {
             return true;
         }
         boolean regularGraph = true;
@@ -212,12 +216,98 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
 
     @Override
     public boolean save(String file) {
-        return false;
+        try {
+            JSONObject edgesObject = new JSONObject();
+            JSONArray Edges = new JSONArray();
+            JSONObject nodeObject = new JSONObject();
+            JSONArray Nodes = new JSONArray();
+            JSONObject AllObj = new JSONObject();
+            ArrayList<NodeData> nodeArray = new ArrayList<>();
+            Iterator<NodeData> nodeIter = this.graph.nodeIter();
+            while (nodeIter.hasNext()) {
+                nodeArray.add(nodeIter.next());
+            }
+            for (NodeData i : nodeArray) {
+                edgesObject = new JSONObject();
+                Iterator<EdgeData> edgeNode = this.graph.edgeIter(i.getKey());
+                ArrayList<EdgeData> edgeArray = new ArrayList<>();
+                while (edgeNode.hasNext()) {
+                    edgeArray.add(edgeNode.next());
+                }
+                for (EdgeData e : edgeArray) {
+                    edgesObject.put("src", e.getSrc());
+                    edgesObject.put("w", e.getWeight());
+                    edgesObject.put("dest", e.getDest());
+                    Edges.put(edgesObject);
+                }
+            }
+            AllObj.put("Edges", Edges);
+
+            for (NodeData i : nodeArray) {
+                nodeObject = new JSONObject();
+                String s = "" + i.getLocation();
+                nodeObject.put("pos", s);
+                nodeObject.put("id", i.getKey());
+                Nodes.put(nodeObject);
+                s = "";
+            }
+            AllObj.put("Nodes", Nodes);
+            try {
+                PrintWriter pw = new PrintWriter("graph.json");
+                pw.write(AllObj.toString());
+                pw.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
     public boolean load(String file) {
-        return false;
+//        try
+//        {
+//            DirectedWeightedGraph loaded = new DWGraph();
+//            Scanner scanner = new Scanner(new File(file));
+//            String jsonString = scanner.useDelimiter("\\A").next();
+//            scanner.close();
+//
+//            JSONObject vertex = new JSONObject();
+//            JSONObject edges = new JSONObject();
+//            JSONObject jsonObject = new JSONObject(jsonString);
+//
+//            JSONArray vertexArray = jsonObject.getJSONArray("Nodes");
+//
+//            for(int i=0; i<vertexArray.length(); i++)
+//            {
+//                vertex = vertexArray.getJSONObject(i);
+//                int n = vertex.getInt("id");
+//                String pos = (String)vertex.get("pos");
+//                NodeData node = new myNode(n);
+//                String [] s = pos.split(",");
+//                node.setLocation(new myGeo(Double.parseDouble(s[0]), Double.parseDouble(s[1]), Double.parseDouble(s[2])));
+//                loaded.addNode(node);
+//            }
+//
+//            JSONArray edgesArray = jsonObject.getJSONArray("Edges");
+//            for(int i=0; i<edgesArray.length(); i++)
+//            {
+//                edges = edgesArray.getJSONObject(i);
+//                int src = edges.getInt("src");
+//                int dest = edges.getInt("dest");
+//                double w = edges.getDouble("w");
+//                loaded.connect(src, dest, w);
+//            }
+//            this.graph = loaded;
+//        }
+//        catch(FileNotFoundException | JSONException e)
+//        {
+//            e.printStackTrace();
+//        }
+        return true;
     }
 
     private DirectedWeightedGraph reverseGraph() {

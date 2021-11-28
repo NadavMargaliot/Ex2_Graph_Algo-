@@ -1,8 +1,9 @@
+import api.DirectedWeightedGraph;
+import api.DirectedWeightedGraphAlgorithms;
 import api.NodeData;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,6 +12,9 @@ class DWGraphAlgorithmsTest {
     NodeData node1 = new myNode(1);
     NodeData node2 = new myNode(2);
     NodeData node3 = new myNode(3);
+    NodeData node4 = new myNode(4);
+    NodeData node5 = new myNode(5);
+    NodeData node6 = new myNode(6);
 
 
     @Test
@@ -152,9 +156,35 @@ class DWGraphAlgorithmsTest {
 
     @Test
     void save() {
+        DirectedWeightedGraph graph = new DWGraph();
+        DirectedWeightedGraphAlgorithms algo = new DWGraphAlgorithms();
+        graph.addNode(node1);
+        graph.addNode(node2);
+        graph.addNode(node3);
+        graph.addNode(node4);
+        graph.addNode(node5);
+        graph.addNode(node6);
+        graph.connect(1,2,2);
+        graph.connect(2,1,2);
+        graph.connect(2,3,3);
+        graph.connect(3,2,3);
+        graph.connect(3,4,1);
+        graph.connect(4,3,1);
+        graph.connect(3,5,4);
+        graph.connect(5,3,4);
+        graph.connect(5,4,4);
+        graph.connect(4,5,4);
+        graph.connect(3,6,4);
+        graph.connect(6,3,4);
+        algo.init(graph);
+        algo.save("a.txt");
+
+
     }
 
     @Test
     void load() {
+
+
     }
 }

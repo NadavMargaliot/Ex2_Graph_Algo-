@@ -98,8 +98,6 @@ public class DWGraph implements DirectedWeightedGraph {
         return edgeDataArrayList.iterator();
     }
 
-
-
     @Override
     public Iterator<EdgeData> edgeIter(int node_id) {
         return this.neighbors.get(node_id).values().iterator();
