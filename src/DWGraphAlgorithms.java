@@ -236,9 +236,39 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
         return nodesMap.get(resPlaceInMap);
     }
 
-    @Override
     public List<NodeData> tsp(List<NodeData> cities) {
-        return null;
+        double min = Double.POSITIVE_INFINITY;
+        List<NodeData> path = new ArrayList<>();
+        for (Iterator<NodeData> fromNode = cities.listIterator(); fromNode.hasNext(); ) {
+            NodeData curr = fromNode.next();
+            Comparator<NodeData> lessWeight = new Comparator<>() {
+                @Override
+                public int compare(NodeData node1, NodeData node2 ) {
+                    return Double.compare(shortestPathDist(curr.getKey(), node1.getKey()),
+                            shortestPathDist(curr.getKey() ,node2.getKey()));
+                }
+            };
+            PriorityQueue<NodeData> sp = new PriorityQueue<>(lessWeight);
+            for (Iterator<NodeData> toNode = cities.listIterator(); toNode.hasNext();){
+                NodeData tmp = toNode.next();
+                if(curr.getKey() != tmp.getKey())
+                    sp.add(tmp);
+            }
+            double sum = 0;
+            List<NodeData> checkpath = new ArrayList<>();
+            NodeData tt = curr;
+            checkpath.add(curr);
+            while (!sp.isEmpty()){
+                sum = sum + shortestPathDist(tt.getKey(),sp.peek().getKey());
+                tt = sp.peek();
+                checkpath.add(sp.poll());
+            }
+            if(sum<min){
+                min = sum;
+                path = checkpath;
+            }
+        }
+        return path;
     }
 
     @Override

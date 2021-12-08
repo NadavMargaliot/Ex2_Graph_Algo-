@@ -4,6 +4,7 @@ import api.NodeData;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -186,6 +187,33 @@ class DWGraphAlgorithmsTest {
 
     @Test
     void tsp() {
+        DWGraph g = new DWGraph();
+        NodeData a = new myNode(1);
+        NodeData b = new myNode(2);
+        NodeData c = new myNode(3);
+        NodeData d = new myNode(4);
+        g.addNode(a);
+        g.addNode(b);
+        g.addNode(c);
+        g.addNode(d);
+        g.connect(a.getKey(), b.getKey(), 3);
+        g.connect(a.getKey(), c.getKey(), 2);
+        g.connect(c.getKey(), b.getKey(), 2);
+        g.connect(c.getKey(), a.getKey(), 3);
+        g.connect(b.getKey(), d.getKey(), 4);
+        g.connect(d.getKey(), c.getKey(), 9);
+        g.connect(d.getKey(), b.getKey(), 4);
+        g.connect(b.getKey(), c.getKey(), 2);
+        List<NodeData> aa = new ArrayList<>();
+        aa.add(d);
+        aa.add(b);
+        aa.add(c);
+        aa.add(a);
+        DWGraphAlgorithms graphAlgorithms = new DWGraphAlgorithms();
+        graphAlgorithms.init(g);
+        aa = graphAlgorithms.tsp(aa);
+        List<NodeData> bb = List.of(new NodeData[]{a, c, b, d});
+        assertEquals(aa,bb);
     }
 
     @Test
