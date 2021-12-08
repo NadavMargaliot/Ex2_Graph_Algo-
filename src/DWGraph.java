@@ -111,6 +111,7 @@ public class DWGraph implements DirectedWeightedGraph {
         NodeData tmp = this.vertices.get(key);
         this.vertices.remove(key);
         this.nodeSize--;
+        this.MC++;
         int size = this.neighbors.get(key).size();
         this.neighbors.remove(key);
         this.edgeSize -= size;

@@ -206,16 +206,13 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
 
     @Override
     public NodeData center() {
-        if (!isConnected()) {
+        if (!isConnected() || this.graph.nodeSize() == 0) {
             return null;
         }
-        if (this.graph.nodeSize() == 0) {
-            return null;
-        }
+        double resPlaceInMap = Double.POSITIVE_INFINITY;
+        HashMap<Double , NodeData> nodesMap = new HashMap<>();
         double maxDist = 0;
         double dist = 0;
-        ArrayList<NodeData> vertics = new ArrayList<>();
-        ArrayList<Double> verticesDest = new ArrayList<>();
         Iterator<NodeData> nodes = this.graph.nodeIter();
         Iterator<NodeData> goToNodes = this.graph.nodeIter();
         while (nodes.hasNext()) {
@@ -229,20 +226,14 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
                     }
                 }
             }
-            verticesDest.add(maxDist);
-            vertics.add(currNode);
+            if (maxDist < resPlaceInMap){
+                resPlaceInMap = maxDist;
+            }
+            nodesMap.put(maxDist , currNode);
             goToNodes = this.graph.nodeIter();
             maxDist = 0;
         }
-        int place = -1;
-        double minDist = Double.POSITIVE_INFINITY;
-        for (int i = 0; i < verticesDest.size(); i++) {
-            if (verticesDest.get(i) < minDist) {
-                minDist = verticesDest.get(i);
-                place = i;
-            }
-        }
-        return vertics.get(place);
+        return nodesMap.get(resPlaceInMap);
     }
 
     @Override
