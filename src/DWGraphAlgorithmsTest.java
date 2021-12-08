@@ -37,12 +37,12 @@ class DWGraphAlgorithmsTest {
         gr.addNode(node1);
         gr.addNode(node2);
         gr.addNode(node3);
-        gr.connect(node1.getKey() , node2.getKey() , 10);
-        gr.connect(node1.getKey() , node3.getKey() , 11);
-        gr.connect(node3.getKey() , node1.getKey() , 25);
-        gr.connect(node3.getKey() , node2.getKey() , 31);
-        gr.connect(node2.getKey() , node3.getKey() , 12);
-        gr.connect(node2.getKey() , node1.getKey() , 13);
+        gr.connect(node1.getKey(), node2.getKey(), 10);
+        gr.connect(node1.getKey(), node3.getKey(), 11);
+        gr.connect(node3.getKey(), node1.getKey(), 25);
+        gr.connect(node3.getKey(), node2.getKey(), 31);
+        gr.connect(node2.getKey(), node3.getKey(), 12);
+        gr.connect(node2.getKey(), node1.getKey(), 13);
         DWGraphAlgorithms graphAlgorithms = new DWGraphAlgorithms();
         graphAlgorithms.init(gr);
         assertTrue(graphAlgorithms.isConnected());
@@ -58,16 +58,16 @@ class DWGraphAlgorithmsTest {
         g.addNode(c);
         g.addNode(d);
         g.addNode(e);
-        g.connect(a.getKey() , b.getKey() , 1);
-        g.connect(b.getKey() , c.getKey() , 1);
-        g.connect(c.getKey() , d.getKey() , 1);
-        g.connect(d.getKey() , e.getKey() , 1);
-        g.connect(e.getKey() , a.getKey() , 1);
-        g.connect(a.getKey() , d.getKey() , 1);
+        g.connect(a.getKey(), b.getKey(), 1);
+        g.connect(b.getKey(), c.getKey(), 1);
+        g.connect(c.getKey(), d.getKey(), 1);
+        g.connect(d.getKey(), e.getKey(), 1);
+        g.connect(e.getKey(), a.getKey(), 1);
+        g.connect(a.getKey(), d.getKey(), 1);
         DWGraphAlgorithms graphAlgorithms2 = new DWGraphAlgorithms();
         graphAlgorithms2.init(g);
         assertTrue(graphAlgorithms2.isConnected());
-        g.removeEdge(e.getKey(),a.getKey());
+        g.removeEdge(e.getKey(), a.getKey());
         assertFalse(graphAlgorithms2.isConnected());
 
 
@@ -89,21 +89,21 @@ class DWGraphAlgorithmsTest {
         g.addNode(e);
         g.addNode(f);
         g.addNode(h);
-        g.connect(a.getKey(),b.getKey() , 3);
-        g.connect(a.getKey(),c.getKey(),2);
-        g.connect(c.getKey(),b.getKey(),2);
-        g.connect(c.getKey(),e.getKey(),3);
-        g.connect(b.getKey(),d.getKey(),4);
-        g.connect(b.getKey(),e.getKey(),1);
-        g.connect(d.getKey(),f.getKey(),1);
-        g.connect(e.getKey(),f.getKey(),2);
+        g.connect(a.getKey(), b.getKey(), 3);
+        g.connect(a.getKey(), c.getKey(), 2);
+        g.connect(c.getKey(), b.getKey(), 2);
+        g.connect(c.getKey(), e.getKey(), 3);
+        g.connect(b.getKey(), d.getKey(), 4);
+        g.connect(b.getKey(), e.getKey(), 1);
+        g.connect(d.getKey(), f.getKey(), 1);
+        g.connect(e.getKey(), f.getKey(), 2);
         DWGraphAlgorithms graphAlgorithms = new DWGraphAlgorithms();
         graphAlgorithms.init(g);
-        assertEquals(6 , graphAlgorithms.shortestPathDist(a.getKey(),f.getKey()));
-        assertEquals(3 , graphAlgorithms.shortestPathDist(a.getKey(),b.getKey()));
-        assertEquals(4 , graphAlgorithms.shortestPathDist(a.getKey(),e.getKey()));
-        assertEquals(-1 , graphAlgorithms.shortestPathDist(a.getKey(),h.getKey()));
-        assertEquals(-1 , graphAlgorithms.shortestPathDist(b.getKey(),h.getKey()));
+        assertEquals(6, graphAlgorithms.shortestPathDist(a.getKey(), f.getKey()));
+        assertEquals(3, graphAlgorithms.shortestPathDist(a.getKey(), b.getKey()));
+        assertEquals(4, graphAlgorithms.shortestPathDist(a.getKey(), e.getKey()));
+        assertEquals(-1, graphAlgorithms.shortestPathDist(a.getKey(), h.getKey()));
+        assertEquals(-1, graphAlgorithms.shortestPathDist(b.getKey(), h.getKey()));
     }
 
     @Test
@@ -122,14 +122,14 @@ class DWGraphAlgorithmsTest {
         g.addNode(e);
         g.addNode(f);
         g.addNode(h);
-        g.connect(a.getKey(),b.getKey() , 3);
-        g.connect(a.getKey(),c.getKey(),2);
-        g.connect(c.getKey(),b.getKey(),2);
-        g.connect(c.getKey(),e.getKey(),3);
-        g.connect(b.getKey(),d.getKey(),4);
-        g.connect(b.getKey(),e.getKey(),1);
-        g.connect(d.getKey(),f.getKey(),1);
-        g.connect(e.getKey(),f.getKey(),2);
+        g.connect(a.getKey(), b.getKey(), 3);
+        g.connect(a.getKey(), c.getKey(), 2);
+        g.connect(c.getKey(), b.getKey(), 2);
+        g.connect(c.getKey(), e.getKey(), 3);
+        g.connect(b.getKey(), d.getKey(), 4);
+        g.connect(b.getKey(), e.getKey(), 1);
+        g.connect(d.getKey(), f.getKey(), 1);
+        g.connect(e.getKey(), f.getKey(), 2);
         DWGraphAlgorithms graphAlgorithms = new DWGraphAlgorithms();
         graphAlgorithms.init(g);
         ArrayList<NodeData> expected1 = new ArrayList<>();
@@ -141,9 +141,9 @@ class DWGraphAlgorithmsTest {
         expected2.add(c);
         expected2.add(e);
         expected2.add(f);
-        assertEquals(expected1, graphAlgorithms.shortestPath(a.getKey(),f.getKey()));
-        assertEquals(expected2, graphAlgorithms.shortestPath((c.getKey()),f.getKey()));
-        assertNull(graphAlgorithms.shortestPath(a.getKey(),h.getKey()));
+        assertEquals(expected1, graphAlgorithms.shortestPath(a.getKey(), f.getKey()));
+        assertEquals(expected2, graphAlgorithms.shortestPath((c.getKey()), f.getKey()));
+        assertNull(graphAlgorithms.shortestPath(a.getKey(), h.getKey()));
     }
 
     @Test
@@ -164,18 +164,18 @@ class DWGraphAlgorithmsTest {
         graph.addNode(node4);
         graph.addNode(node5);
         graph.addNode(node6);
-        graph.connect(1,2,2);
-        graph.connect(2,1,2);
-        graph.connect(2,3,3);
-        graph.connect(3,2,3);
-        graph.connect(3,4,1);
-        graph.connect(4,3,1);
-        graph.connect(3,5,4);
-        graph.connect(5,3,4);
-        graph.connect(5,4,4);
-        graph.connect(4,5,4);
-        graph.connect(3,6,4);
-        graph.connect(6,3,4);
+        graph.connect(1, 2, 2);
+        graph.connect(2, 1, 2);
+        graph.connect(2, 3, 3);
+        graph.connect(3, 2, 3);
+        graph.connect(3, 4, 1);
+        graph.connect(4, 3, 1);
+        graph.connect(3, 5, 4);
+        graph.connect(5, 3, 4);
+        graph.connect(5, 4, 4);
+        graph.connect(4, 5, 4);
+        graph.connect(3, 6, 4);
+        graph.connect(6, 3, 4);
         algo.init(graph);
         algo.save("a.txt");
 
@@ -184,6 +184,9 @@ class DWGraphAlgorithmsTest {
 
     @Test
     void load() {
+        DirectedWeightedGraph graph = new DWGraph();
+        DirectedWeightedGraphAlgorithms algo = new DWGraphAlgorithms();
+        algo.load("/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G1.json");
 
 
     }

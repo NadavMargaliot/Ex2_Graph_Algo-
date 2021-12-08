@@ -2,10 +2,13 @@ import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
 import api.EdgeData;
 import api.NodeData;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.*;
 
@@ -206,7 +209,24 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
         if (!isConnected()) {
             return null;
         }
-        return null;
+        double sumMin = Double.POSITIVE_INFINITY;
+        double sum = 0;
+        NodeData result = null;
+        Iterator<NodeData> nodes = this.graph.nodeIter();
+        Iterator<NodeData> goToNodes = this.graph.nodeIter();
+        while (nodes.hasNext()) {
+            NodeData currNode = nodes.next();
+            while (goToNodes.hasNext()) {
+                NodeData currGoToNode = goToNodes.next();
+                sum += shortestPathDist(currNode.getKey(), currGoToNode.getKey());
+            }
+            if (sum < sumMin) {
+                result = currNode;
+                sumMin = sum;
+            }
+            goToNodes = this.graph.nodeIter();
+        }
+        return result;
     }
 
     @Override
@@ -215,43 +235,48 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
     }
 
     @Override
+
     public boolean save(String file) {
         try {
-            JSONObject edgesObject = new JSONObject();
-            JSONArray Edges = new JSONArray();
-            JSONObject nodeObject = new JSONObject();
-            JSONArray Nodes = new JSONArray();
-            JSONObject AllObj = new JSONObject();
+
+            JsonObject edgesObject = new JsonObject();
+
+            JsonArray Edges = new JsonArray();
+            JsonObject nodeObject = new JsonObject();
+            JsonArray Nodes = new JsonArray();
+            JsonObject AllObj = new JsonObject();
             ArrayList<NodeData> nodeArray = new ArrayList<>();
             Iterator<NodeData> nodeIter = this.graph.nodeIter();
             while (nodeIter.hasNext()) {
                 nodeArray.add(nodeIter.next());
             }
             for (NodeData i : nodeArray) {
-                edgesObject = new JSONObject();
+                edgesObject = new JsonObject();
                 Iterator<EdgeData> edgeNode = this.graph.edgeIter(i.getKey());
                 ArrayList<EdgeData> edgeArray = new ArrayList<>();
                 while (edgeNode.hasNext()) {
                     edgeArray.add(edgeNode.next());
                 }
                 for (EdgeData e : edgeArray) {
-                    edgesObject.put("src", e.getSrc());
-                    edgesObject.put("w", e.getWeight());
-                    edgesObject.put("dest", e.getDest());
-                    Edges.put(edgesObject);
+                    edgesObject.addProperty("src", e.getSrc());
+                    edgesObject.addProperty("w", e.getWeight());
+                    edgesObject.addProperty("dest", e.getDest());
+                    JsonObject ob = edgesObject.deepCopy();
+                    Edges.add(ob);
+
                 }
             }
-            AllObj.put("Edges", Edges);
+            AllObj.add("Edges", Edges);
 
             for (NodeData i : nodeArray) {
-                nodeObject = new JSONObject();
+                nodeObject = new JsonObject();
                 String s = "" + i.getLocation();
-                nodeObject.put("pos", s);
-                nodeObject.put("id", i.getKey());
-                Nodes.put(nodeObject);
+                nodeObject.addProperty("pos", s);
+                nodeObject.addProperty("id", i.getKey());
+                Nodes.add(nodeObject);
                 s = "";
             }
-            AllObj.put("Nodes", Nodes);
+            AllObj.add("Nodes", Nodes);
             try {
                 PrintWriter pw = new PrintWriter("graph.json");
                 pw.write(AllObj.toString());
@@ -267,46 +292,52 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
     }
 
     @Override
+
     public boolean load(String file) {
-//        try
-//        {
-//            DirectedWeightedGraph loaded = new DWGraph();
-//            Scanner scanner = new Scanner(new File(file));
-//            String jsonString = scanner.useDelimiter("\\A").next();
-//            scanner.close();
-//
-//            JSONObject vertex = new JSONObject();
-//            JSONObject edges = new JSONObject();
-//            JSONObject jsonObject = new JSONObject(jsonString);
-//
-//            JSONArray vertexArray = jsonObject.getJSONArray("Nodes");
-//
-//            for(int i=0; i<vertexArray.length(); i++)
-//            {
-//                vertex = vertexArray.getJSONObject(i);
-//                int n = vertex.getInt("id");
-//                String pos = (String)vertex.get("pos");
-//                NodeData node = new myNode(n);
-//                String [] s = pos.split(",");
-//                node.setLocation(new myGeo(Double.parseDouble(s[0]), Double.parseDouble(s[1]), Double.parseDouble(s[2])));
-//                loaded.addNode(node);
-//            }
-//
-//            JSONArray edgesArray = jsonObject.getJSONArray("Edges");
-//            for(int i=0; i<edgesArray.length(); i++)
-//            {
-//                edges = edgesArray.getJSONObject(i);
-//                int src = edges.getInt("src");
-//                int dest = edges.getInt("dest");
-//                double w = edges.getDouble("w");
-//                loaded.connect(src, dest, w);
-//            }
-//            this.graph = loaded;
-//        }
-//        catch(FileNotFoundException | JSONException e)
-//        {
-//            e.printStackTrace();
-//        }
+        try
+        {
+            DirectedWeightedGraph loaded = new DWGraph();
+
+            JsonParser jsonParser = new JsonParser();
+            FileReader reader = new FileReader(file);
+            Object obj  = jsonParser.parse(reader);
+
+
+            JsonObject vertex = new JsonObject();
+            JsonObject edges = new JsonObject();
+            JsonObject jsonObject = (JsonObject) obj;
+
+
+            JsonArray vertexArray = jsonObject.getAsJsonArray("Nodes");
+
+            for(int i=0; i<vertexArray.size(); i++)
+            {
+                vertex = vertexArray.get(i).getAsJsonObject();
+                int n = vertex.get("id").getAsInt();
+                String pos = vertex.get("pos").getAsString();
+                NodeData node = new myNode(n);
+                String [] s = pos.split(",");
+                node.setLocation(new myGeo(Double.parseDouble(s[0]), Double.parseDouble(s[1]), Double.parseDouble(s[2])));
+                loaded.addNode(node);
+            }
+
+            JsonArray edgesArray = jsonObject.getAsJsonArray("Edges");
+            for(int i=0; i<edgesArray.size(); i++)
+            {
+                edges = edgesArray.get(i).getAsJsonObject();
+                int src = edges.get("src").getAsInt();
+                int dest = edges.get("dest").getAsInt();
+                double w = edges.get("w").getAsDouble();
+                loaded.connect(src, dest, w);
+            }
+            this.graph= loaded;
+
+
+        }
+        catch(FileNotFoundException | JsonIOException e)
+        {
+            e.printStackTrace();
+        }
         return true;
     }
 
