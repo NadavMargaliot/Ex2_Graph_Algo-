@@ -104,6 +104,28 @@ class DWGraphAlgorithmsTest {
         assertEquals(4, graphAlgorithms.shortestPathDist(a.getKey(), e.getKey()));
         assertEquals(-1, graphAlgorithms.shortestPathDist(a.getKey(), h.getKey()));
         assertEquals(-1, graphAlgorithms.shortestPathDist(b.getKey(), h.getKey()));
+
+
+
+        DirectedWeightedGraph rr = new DWGraph();
+        DirectedWeightedGraphAlgorithms test = new DWGraphAlgorithms();
+        test.init(rr);
+        NodeData q = new myNode(0);
+        NodeData w = new myNode(1);
+        NodeData r = new myNode(2);
+        NodeData t = new myNode(3);
+        test.getGraph().addNode(q);
+        test.getGraph().addNode(w);
+        test.getGraph().addNode(r);
+        test.getGraph().addNode(t);
+        test.getGraph().connect(0, 1, 3.0);
+        test.getGraph().connect(0, 3, 7.0);
+        test.getGraph().connect(1, 0, 8.0);
+        test.getGraph().connect(1, 2, 2.0);
+        test.getGraph().connect(2, 0, 5.0);
+        test.getGraph().connect(2, 3, 1.0);
+        test.getGraph().connect(3, 0, 2.0);
+        assertEquals(7.0, test.shortestPathDist(3, 2));
     }
 
     @Test
@@ -148,6 +170,18 @@ class DWGraphAlgorithmsTest {
 
     @Test
     void center() {
+        DirectedWeightedGraphAlgorithms algo1 = new DWGraphAlgorithms();
+        algo1.load("/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G1.json");
+        System.out.println("G1 " + algo1.center().getKey());
+        DirectedWeightedGraphAlgorithms algo2 = new DWGraphAlgorithms();
+        algo2.load("/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G2.json");
+        System.out.println("G2 " + algo2.center().getKey());
+        DirectedWeightedGraphAlgorithms algo3 = new DWGraphAlgorithms();
+        algo3.load("/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G3.json");
+        System.out.println("G3 " + algo3.center().getKey());
+
+
+
     }
 
     @Test
@@ -184,10 +218,9 @@ class DWGraphAlgorithmsTest {
 
     @Test
     void load() {
-        DirectedWeightedGraph graph = new DWGraph();
         DirectedWeightedGraphAlgorithms algo = new DWGraphAlgorithms();
         algo.load("/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G1.json");
-
-
+        assertEquals(17 , algo.getGraph().nodeSize());
+        assertEquals(35.21007339305892 , algo.getGraph().getNode(3).getLocation().x());
     }
 }

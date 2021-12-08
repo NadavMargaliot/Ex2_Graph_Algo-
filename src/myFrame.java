@@ -1,8 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class GUI_Algo {
-    public static void main(String[] args) {
+public class myFrame extends JFrame {
+    public myFrame(){
+        super();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         JFrame j = new JFrame();
         j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
