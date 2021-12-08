@@ -210,7 +210,7 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
             return null;
         }
         double resPlaceInMap = Double.POSITIVE_INFINITY;
-        HashMap<Double , NodeData> nodesMap = new HashMap<>();
+        HashMap<Double, NodeData> nodesMap = new HashMap<>();
         double maxDist = 0;
         double dist = 0;
         Iterator<NodeData> nodes = this.graph.nodeIter();
@@ -226,10 +226,10 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
                     }
                 }
             }
-            if (maxDist < resPlaceInMap){
+            if (maxDist < resPlaceInMap) {
                 resPlaceInMap = maxDist;
             }
-            nodesMap.put(maxDist , currNode);
+            nodesMap.put(maxDist, currNode);
             goToNodes = this.graph.nodeIter();
             maxDist = 0;
         }
@@ -245,9 +245,7 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
 
     public boolean save(String file) {
         try {
-
             JsonObject edgesObject = new JsonObject();
-
             JsonArray Edges = new JsonArray();
             JsonObject nodeObject = new JsonObject();
             JsonArray Nodes = new JsonArray();

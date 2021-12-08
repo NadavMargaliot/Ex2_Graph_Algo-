@@ -10,9 +10,33 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 
-public class graphWindow extends JFrame implements ActionListener, MouseListener , MouseMotionListener {
+public class graphWindow extends JFrame implements ActionListener{
     ArrayList<GeoLocation> locationsList = new ArrayList<>();
     DirectedWeightedGraphAlgorithms algo;
+    JMenuBar mb;
+    JMenu menu;
+    JMenu editGraph;
+    JMenu algorithm;
+    JMenu saveLoad;
+    JMenuItem save;
+    JMenuItem load;
+    JMenuItem removeNode;
+    JMenuItem addNode;
+    JMenuItem removeEdge;
+    JMenuItem addEdge;
+    JMenuItem isConnected;
+    JMenuItem shortestPath;
+    JMenuItem center;
+    JMenuItem tsp;
+    JButton loadButton;
+    JButton saveButton;
+    JButton addNodeButton;
+    JButton removeNodeButton;
+    JButton addEdgeButton;
+    JButton removeEdgeButton;
+    JButton isConnectedButton;
+    JButton shortestPathButton;
+    JPanel panel;
 
 
     public graphWindow(DirectedWeightedGraphAlgorithms algorithm) throws HeadlessException{
@@ -31,7 +55,11 @@ public class graphWindow extends JFrame implements ActionListener, MouseListener
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(screenSize.width / 2, screenSize.height / 2);
         this.setTitle("Directed Weighted Graph");
+
         createMenuBar();
+
+//       loadButton();
+
 
 
 
@@ -56,144 +84,103 @@ public class graphWindow extends JFrame implements ActionListener, MouseListener
     }
 
     private void createMenuBar(){
-        JMenuBar mb = new JMenuBar();
-        JMenu menu = new JMenu("Menu");
-        mb.add(menu);
+
+        this.mb = new JMenuBar();
+        this.menu = new JMenu("Menu");
+        this.menu.setVerticalAlignment(JMenu.TOP);
+        this.mb.add(menu);
         this.add(mb);
-        JMenu saveLoad = new JMenu("Save/Load");
-        saveLoad.addActionListener(this);
-        JMenuItem load = new JMenuItem("Load");
-        load.addActionListener(this);
-        JMenuItem save = new JMenuItem("Save");
-        save.addActionListener(this);
-        JMenu editGraph = new JMenu("Edit graph");
-        editGraph.addActionListener(this);
-        JMenu algorithm = new JMenu("Algorithm");
-        algorithm.addActionListener(this);
-        menu.add(saveLoad);
-        saveLoad.add(load);
-        saveLoad.add(save);
-        menu.add(editGraph);
-        menu.add(algorithm);
-        JMenuItem removeNode = new JMenuItem("Remove Node");
-        removeNode.addActionListener(this);
-        JMenuItem addNode = new JMenuItem("Add Node");
-        addNode.addActionListener(this);
-        JMenuItem removeEdge = new JMenuItem("Remove Edge");
-        removeEdge.addActionListener(this);
-        JMenuItem addEdge = new JMenuItem("Add Edge");
-        addEdge.addActionListener(this);
-        editGraph.add(removeNode);
-        editGraph.add(addNode);
-        editGraph.add(removeEdge);
-        editGraph.add(addEdge);
-        JMenuItem isConnected = new JMenuItem("Is Connected");
-        isConnected.addActionListener(this);
+        this.saveLoad = new JMenu("Save/Load");
+        this.saveLoad.addActionListener(this);
+        this.saveLoad.setVerticalAlignment(JMenu.TOP);
+         this.load = new JMenuItem("Load");
+        this.load.addActionListener(this);
+        this.save = new JMenuItem("Save");
+        this.save.addActionListener(this);
+        this.editGraph = new JMenu("Edit graph");
+        this.editGraph.addActionListener(this);
+        this.algorithm = new JMenu("Algorithm");
+        this.algorithm.addActionListener(this);
+        this.menu.add(saveLoad);
+        this.saveLoad.add(load);
+        this.saveLoad.add(save);
+        this.menu.add(editGraph);
+        this.menu.add(algorithm);
+        this.removeNode = new JMenuItem("Remove Node");
+        this.removeNode.addActionListener(this);
+        this.addNode = new JMenuItem("Add Node");
+        this.addNode.addActionListener(this);
+        this.removeEdge = new JMenuItem("Remove Edge");
+        this.removeEdge.addActionListener(this);
+        this.addEdge = new JMenuItem("Add Edge");
+        this.addEdge.addActionListener(this);
+        this.editGraph.add(removeNode);
+        this.editGraph.add(addNode);
+        this.editGraph.add(removeEdge);
+        this.editGraph.add(addEdge);
+        this.isConnected = new JMenuItem("Is Connected");
+        this.isConnected.addActionListener(this);
+        this.shortestPath = new JMenuItem("Shorted Path");
+        this.shortestPath.addActionListener(this);
+        this.center = new JMenuItem("Center");
+        this.center.addActionListener(this);
+        this.tsp = new JMenuItem("Tsp");
+        this.tsp.addActionListener(this);
+        this.algorithm.add(isConnected);
+        this.algorithm.add(shortestPath);
+        this.algorithm.add(center);
+        this.algorithm.add(tsp);
+        this.panel = new JPanel();
+        this.panel.setLayout(null);
+        this.loadButton = new JButton("Load");
+        JTextField loadText = new JTextField();
+        JLabel loadLabel = new JLabel("Enter path to load:");
+        loadButton.setBounds(50,150,50,20);
+        loadText.setBounds(50,50,100,20);
+        loadLabel.setBounds(50,100,50,20);
+        panel.add(loadButton);
+        panel.add(loadText);
+        panel.add(loadLabel);
 
-        JMenu shortestPath = new JMenu("Shorted Path");
-        shortestPath.addActionListener(this);
-        JMenuItem shortestPathDist = new JMenuItem("Shortest Path Distance");
-        shortestPathDist.addActionListener(this);
-        JMenuItem shortestPath2 = new JMenuItem("ShortestPath");
-        shortestPath2.addActionListener(this);
-        shortestPath.add(shortestPathDist);
-        shortestPath.add(shortestPath2);
+        this.add(panel);
 
-        JMenuItem center = new JMenuItem("Center");
-        center.addActionListener(this);
-        JMenuItem tsp = new JMenuItem("Tsp");
-        tsp.addActionListener(this);
-        algorithm.add(isConnected);
-        algorithm.add(shortestPath);
-        algorithm.add(center);
-        algorithm.add(tsp);
+
+
+//    private void loadButton(){
+//        JButton button = new JButton("Load");
+//        button.addActionListener(this);
+//        JLabel label = new JLabel("Enter path to load");
+//        JTextField textField = new JTextField();
+//        textField.setBounds(50,50,100,20);
+//        button.setBounds(50,150,50,20);
+//        label.setBounds(50,100,50,20);
+//        this.add(button);
+//        this.add(label);
+//        this.add(textField);
+//
+//        ActionListener load = new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                if (e.getSource() == button){
+//                    System.out.println("poo");
+//                }
+//            }
+//        };
+
     }
-
-
-    private void loadButton(){
-        JButton button = new JButton("Load");
-        JLabel label = new JLabel("Enter path to load");
-        JTextField textField = new JTextField();
-        textField.setBounds(50,50,100,20);
-        button.setBounds(50,150,50,20);
-        label.setBounds(50,100,50,20);
-        this.add(button);
-        this.add(label);
-        this.add(textField);
-
-        ActionListener load = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        };
-
-    }
-
-
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == this.loadButton ) {
+            System.out.println("poo");
+        }
 
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-
-    }
-
-//    public static void main(String[] args) {
-//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-//        JFrame j = new JFrame();
-//        j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        j.setSize(screenSize.width/2, screenSize.height/2);
-//        ImageIcon img = new ImageIcon("/Users/adielbenmeir/Desktop/dwg/DWGPIC");
-//        j.setIconImage(img.getImage());
-//        j.setTitle("Directed Weighted Graph");
-//        j.setVisible(true);
-//    }
+    };
 
 
-//    public graphWindow(DirectedWeightedGraphAlgorithms algorithm){
-//        this.algo = algorithm;
-//        DirectedWeightedGraph graph = algo.getGraph();
-//        Iterator<NodeData> nodes = graph.nodeIter();
-//        while (nodes.hasNext()) {
-//            NodeData curr = nodes.next();
-//            GeoLocation tmp = curr.getLocation();
-//            this.locationsList.add(tmp);
-//        }
-//    }
+
+
+
     public class myPanel extends JPanel {
 //        @Override
         ArrayList<GeoLocation> locations = new ArrayList<>();
