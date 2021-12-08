@@ -31,17 +31,48 @@ public class graphWindow extends JFrame implements ActionListener, MouseListener
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(screenSize.width / 2, screenSize.height / 2);
         this.setTitle("Directed Weighted Graph");
+        createMenuBar();
+
+
+
+
+//        ActionListener loadListener = new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                JButton button = new JButton("Load");
+//                JLabel label = new JLabel("Enter path to load");
+//                JTextField textField = new JTextField();
+//                textField.setBounds(50,50,100,20);
+//                button.setBounds(50,150,50,20);
+//                label.setBounds(50,100,50,20);
+//                load.add(button);
+//                load.add(label);
+//                load.add(textField);
+//            }
+//        };
+
+        this.setVisible(true);
+
+    }
+
+    private void createMenuBar(){
         JMenuBar mb = new JMenuBar();
         JMenu menu = new JMenu("Menu");
         mb.add(menu);
         this.add(mb);
         JMenu saveLoad = new JMenu("Save/Load");
         saveLoad.addActionListener(this);
+        JMenuItem load = new JMenuItem("Load");
+        load.addActionListener(this);
+        JMenuItem save = new JMenuItem("Save");
+        save.addActionListener(this);
         JMenu editGraph = new JMenu("Edit graph");
         editGraph.addActionListener(this);
         JMenu algorithm = new JMenu("Algorithm");
         algorithm.addActionListener(this);
         menu.add(saveLoad);
+        saveLoad.add(load);
+        saveLoad.add(save);
         menu.add(editGraph);
         menu.add(algorithm);
         JMenuItem removeNode = new JMenuItem("Remove Node");
@@ -76,12 +107,26 @@ public class graphWindow extends JFrame implements ActionListener, MouseListener
         algorithm.add(shortestPath);
         algorithm.add(center);
         algorithm.add(tsp);
+    }
 
 
-        this.setVisible(true);
+    private void loadButton(){
+        JButton button = new JButton("Load");
+        JLabel label = new JLabel("Enter path to load");
+        JTextField textField = new JTextField();
+        textField.setBounds(50,50,100,20);
+        button.setBounds(50,150,50,20);
+        label.setBounds(50,100,50,20);
+        this.add(button);
+        this.add(label);
+        this.add(textField);
 
+        ActionListener load = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-
+            }
+        };
 
     }
 
