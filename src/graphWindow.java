@@ -39,16 +39,13 @@ public class graphWindow extends JFrame implements ActionListener {
     JButton shortestPathButton;
     JButton shortestPathDistButton;
     JPanel panel;
-    JTextField srcFromUser;
-    JTextField destFromUser;
-    JTextField saveFromUser;
-    JTextField loadFromUser;
-    JTextField xFromUser;
-    JTextField yFromUser;
-    JTextField keyFromUser;
-    int keyForNode;
-    int srcForShortest;
-    int destForShortest;
+    JTextField saveLoadFromUser;
+    JTextField aFromUser;
+    JTextField bFromUser;
+    JTextField cFromUser;
+    int textValue1;
+    int textValue2;
+    double textValue3;
     double xForGeo;
     double yForGeo;
     ArrayList<NodeData> locationsList = new ArrayList<>();
@@ -184,13 +181,13 @@ public class graphWindow extends JFrame implements ActionListener {
         this.miniFrame = new JFrame();
         this.miniFrame.setSize(600, 300);
 
-        this.srcFromUser = new JTextField(3);
-        this.destFromUser = new JTextField(3);
-        this.saveFromUser = new JTextField(30);
-        this.loadFromUser = new JTextField(30);
-        this.xFromUser = new JTextField(3);
-        this.yFromUser = new JTextField(3);
-        this.keyFromUser = new JTextField(3);
+//        this.srcFromUser = new JTextField(3);
+//        this.destFromUser = new JTextField(3);
+        this.saveLoadFromUser = new JTextField(30);
+//        this.loadFromUser = new JTextField(30);
+        this.aFromUser = new JTextField(3);
+        this.bFromUser = new JTextField(3);
+        this.cFromUser = new JTextField(3);
 
 
         this.saveButton = new JButton();
@@ -262,38 +259,38 @@ public class graphWindow extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == this.save) {
             this.miniPanel.removeAll();
-            saveFromUser.setText("");
+            saveLoadFromUser.setText("");
             this.miniLabel.setBounds(120, 30, 400, 30);
             this.miniLabel.setText("Enter full file location");
             this.miniPanel.add(saveButton);
             this.miniPanel.add(miniLabel);
-            this.miniPanel.add(saveFromUser);
+            this.miniPanel.add(saveLoadFromUser);
             this.miniFrame.add(this.miniPanel);
             this.miniFrame.setVisible(true);
         } else if (e.getSource() == saveButton) {
             this.miniFrame.dispose();
-            String g1 = saveFromUser.getText();
+            String g1 = saveLoadFromUser.getText();
             this.algo.save(g1);
         } else if (e.getSource() == this.addNode) {
             this.miniPanel.removeAll();
-            xFromUser.setText("");
-            yFromUser.setText("");
+            aFromUser.setText("");
+            bFromUser.setText("");
             addNodeButton.setText("Enter location");
-            xFromUser.setSize(60, 30);
-            xFromUser.setBounds(130, 60, 60, 20);
-            yFromUser.setSize(60, 30);
-            yFromUser.setBounds(190, 60, 60, 20);
+            aFromUser.setSize(60, 30);
+            aFromUser.setBounds(130, 60, 60, 20);
+            bFromUser.setSize(60, 30);
+            bFromUser.setBounds(190, 60, 60, 20);
             this.algo.init(this.graph);
             this.miniPanel.add(addNodeButton);
             this.miniPanel.add(miniLabel);
-            this.miniPanel.add(xFromUser);
-            this.miniPanel.add(yFromUser);
+            this.miniPanel.add(aFromUser);
+            this.miniPanel.add(bFromUser);
             this.miniFrame.add(this.miniPanel);
             this.miniFrame.setVisible(true);
         } else if (e.getSource() == addNodeButton) {
             miniPanel.removeAll();
-            this.xForGeo = Double.parseDouble(this.xFromUser.getText());
-            this.yForGeo = Double.parseDouble(this.yFromUser.getText());
+            this.xForGeo = Double.parseDouble(this.aFromUser.getText());
+            this.yForGeo = Double.parseDouble(this.bFromUser.getText());
             NodeData node = new myNode();
             node.setLocation(new myGeo((double) xForGeo, (double) yForGeo, (double) 0));
             this.graph.addNode(node);
@@ -308,25 +305,25 @@ public class graphWindow extends JFrame implements ActionListener {
             if (this.graph != null) {
                 this.miniPanel.removeAll();
                 this.miniLabel.setText("Enter the key number of node to remove:");
-                this.keyFromUser.setText("");
+                this.aFromUser.setText("");
 //                this.keyForNode = Integer.parseInt(keyFromUser.getText());
                 this.removeNodeButton.setText("Remove");
                 this.miniPanel.add(this.removeNodeButton);
 //                this.graph.removeNode(keyForNode);
                 this.miniPanel.add(miniLabel);
-                this.miniPanel.add(keyFromUser);
+                this.miniPanel.add(aFromUser);
                 this.miniFrame.add(this.miniPanel);
                 this.miniFrame.setLocationRelativeTo(this);
                 this.miniFrame.setVisible(true);
             }
         } else if (e.getSource() == this.removeNodeButton) {
             this.miniPanel.removeAll();
-            this.keyForNode = Integer.parseInt(this.keyFromUser.getText());
-            if (this.graph.getNode(keyForNode) == null) {
+            this.textValue1 = Integer.parseInt(this.aFromUser.getText());
+            if (this.graph.getNode(textValue1) == null) {
                 this.miniLabel.setText("There is no such node");
             } else {
-                this.miniLabel.setText(("Node " + keyForNode + " was removed"));
-                this.graph.removeNode(keyForNode);
+                this.miniLabel.setText(("Node " + textValue1 + " was removed"));
+                this.graph.removeNode(textValue1);
             }
             this.miniPanel.add(this.miniLabel);
             this.add(miniPanel);
@@ -336,9 +333,35 @@ public class graphWindow extends JFrame implements ActionListener {
             this.miniFrame.setVisible(true);
 
         } else if (e.getSource() == this.addEdge) {
-
+            if (this.graph != null) {
+                this.miniPanel.removeAll();
+                this.aFromUser.setText("");
+                this.bFromUser.setText("");
+                this.cFromUser.setText("");
+                addEdgeButton.setText("Add Edge");
+                this.miniLabel.setText("Enter SRC , DEST and WEIGHT for your new EDGE:");
+                this.algo.init(this.graph);
+                this.miniPanel.add(this.miniLabel);
+                this.miniPanel.add(this.aFromUser);
+                this.miniPanel.add(this.bFromUser);
+                this.miniPanel.add(this.cFromUser);
+                this.miniPanel.add(this.addEdgeButton);
+                this.miniFrame.add(this.miniPanel);
+                this.miniFrame.setLocationRelativeTo(this);
+                this.miniFrame.setVisible(true);
+            }
         } else if (e.getSource() == this.addEdgeButton) {
-
+            this.textValue1 = Integer.parseInt(aFromUser.getText());
+            this.textValue2 = Integer.parseInt(bFromUser.getText());
+            this.textValue3 = Double.parseDouble(cFromUser.getText());
+            this.graph.connect(textValue1,textValue2,textValue3);
+            this.miniFrame.dispose();
+            this.miniPanel.removeAll();
+            this.miniLabel.setText("Edge has been added!");
+            this.miniPanel.add(miniLabel);
+            this.miniFrame.add(miniPanel);
+            this.miniFrame.setLocationRelativeTo(this);
+            this.miniFrame.setVisible(true);
         } else if (e.getSource() == this.removeEdge) {
 
         } else if (e.getSource() == this.removeEdgeButton) {
@@ -369,33 +392,33 @@ public class graphWindow extends JFrame implements ActionListener {
             this.miniFrame.setVisible(true);
         } else if (e.getSource() == this.shortestPath) {
             this.miniPanel.removeAll();
-            srcFromUser.setText("");
-            destFromUser.setText("");
+            aFromUser.setText("");
+            bFromUser.setText("");
             this.miniLabel.setText("Enter first SRC and than DEST to find shortest path:");
             this.miniLabel.setBounds(100, 30, 400, 20);
             this.algo.init(this.graph);
             this.miniPanel.add(shortestPathButton);
             this.miniPanel.add(shortestPathDistButton);
             this.miniPanel.add(miniLabel);
-            this.miniPanel.add(srcFromUser);
-            this.miniPanel.add(destFromUser);
+            this.miniPanel.add(aFromUser);
+            this.miniPanel.add(bFromUser);
             this.miniFrame.add(this.miniPanel);
             this.miniFrame.setLocationRelativeTo(this);
             this.miniFrame.setVisible(true);
         } else if (e.getSource() == this.shortestPathDistButton) {
             this.miniFrame.dispose();
-            srcForShortest = Integer.parseInt(srcFromUser.getText());
-            destForShortest = Integer.parseInt(destFromUser.getText());
-            if (this.graph.getNode(srcForShortest) == null) {
+            textValue1 = Integer.parseInt(aFromUser.getText());
+            textValue2 = Integer.parseInt(bFromUser.getText());
+            if (this.graph.getNode(textValue1) == null) {
                 this.miniLabel.setText("there is no such src");
             }
-            if (this.graph.getNode(destForShortest) == null) {
+            if (this.graph.getNode(textValue2) == null) {
                 this.miniLabel.setText("there is no such dest");
             }
             this.miniPanel.removeAll();
-            double distance = this.algo.shortestPathDist((int) srcForShortest, (int) destForShortest);
-            this.miniLabel.setText("The shortest Distance between Node " + srcForShortest
-                    + " and Node " + destForShortest + " is " + distance);
+            double distance = this.algo.shortestPathDist((int) textValue1, (int) textValue2);
+            this.miniLabel.setText("The shortest Distance between Node " + textValue1
+                    + " and Node " + textValue2 + " is " + distance);
             this.miniLabel.setBounds(100, 30, 400, 20);
             this.miniPanel.add(miniLabel);
             this.miniFrame.add(miniPanel);
@@ -403,17 +426,21 @@ public class graphWindow extends JFrame implements ActionListener {
             this.miniFrame.setVisible(true);
         } else if (e.getSource() == this.shortestPathButton) {
             this.miniFrame.dispose();
-            srcForShortest = Integer.parseInt(srcFromUser.getText());
-            destForShortest = Integer.parseInt(destFromUser.getText());
-            if (this.graph.getNode(srcForShortest) == null) {
+            textValue1 = Integer.parseInt(aFromUser.getText());
+            textValue2 = Integer.parseInt(bFromUser.getText());
+            if (this.graph.getNode(textValue1) == null) {
                 this.miniLabel.setText("there is no such src");
             }
-            if (this.graph.getNode(destForShortest) == null) {
+            if (this.graph.getNode(textValue2) == null) {
                 this.miniLabel.setText("there is no such dest");
             }
+            if (this.algo.shortestPath(textValue1, textValue2) == null) {
+                this.miniLabel.setText("there is no path between those two nodes");
+            }
             this.miniPanel.removeAll();
-            if (this.graph.getNode(srcForShortest) != null && this.graph.getNode(destForShortest) != null) {
-                java.util.List<NodeData> wayNodes = this.algo.shortestPath((int) srcForShortest, (int) destForShortest);
+            if (this.graph.getNode(textValue1) != null && this.graph.getNode(textValue2) != null &&
+                    this.algo.shortestPath(textValue1, textValue2) != null) {
+                java.util.List<NodeData> wayNodes = this.algo.shortestPath((int) textValue1, (int) textValue2);
                 String txt = "The Shortest Way Is ";
                 for (int i = 0; i < wayNodes.size(); i++) {
                     txt += wayNodes.get(i).getKey() + " ";
