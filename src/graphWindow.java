@@ -43,8 +43,14 @@ public class graphWindow extends JFrame implements ActionListener {
     JTextField destFromUser;
     JTextField saveFromUser;
     JTextField loadFromUser;
+    JTextField xFromUser;
+    JTextField yFromUser;
+    JTextField keyFromUser;
+    int keyForNode;
     int srcForShortest;
     int destForShortest;
+    double xForGeo;
+    double yForGeo;
     ArrayList<NodeData> locationsList = new ArrayList<>();
 
     public class myPanel extends JPanel {
@@ -64,6 +70,21 @@ public class graphWindow extends JFrame implements ActionListener {
                 edges.add(edgeItr.next());
             }
         }
+
+//        public void setNew() {
+//            this.nodeItr = graph.nodeIter();
+//            this.edgeItr = graph.edgeIter();
+//            this.nodes = new ArrayList<>();
+//            this.edges = new ArrayList<>();
+//
+//            while (nodeItr.hasNext()) {
+//                this.nodes.add(nodeItr.next());
+//            }
+//            while (edgeItr.hasNext()) {
+//                this.edges.add(edgeItr.next());
+//            }
+//        }
+
 
         @Override
         protected void paintComponent(Graphics g) {
@@ -94,7 +115,6 @@ public class graphWindow extends JFrame implements ActionListener {
     }
 
     private void initialize() {
-
         this.screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(this.screenSize.width / 2, this.screenSize.height / 2);
@@ -102,14 +122,11 @@ public class graphWindow extends JFrame implements ActionListener {
         String G1 = "/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G1.json";
         this.algo.load(G1);
         this.graph = algo.getGraph();
-
         createMenuBar();
         this.setVisible(true);
-
     }
 
     private void createMenuBar() {
-
         this.menu = new JMenuBar();
         this.add(menu);
         this.saveLoad = new JMenu("Save/Load");
@@ -159,7 +176,6 @@ public class graphWindow extends JFrame implements ActionListener {
         this.loadButton = new JButton("Load");
         JTextField loadText = new JTextField();
         JLabel loadLabel = new JLabel("Enter path to load:");
-        this.loadButton.setBounds(50, 150, 50, 20);
         loadText.setBounds(50, 50, 100, 20);
         loadLabel.setBounds(50, 100, 50, 20);
 
@@ -172,59 +188,60 @@ public class graphWindow extends JFrame implements ActionListener {
         this.destFromUser = new JTextField(3);
         this.saveFromUser = new JTextField(30);
         this.loadFromUser = new JTextField(30);
+        this.xFromUser = new JTextField(3);
+        this.yFromUser = new JTextField(3);
+        this.keyFromUser = new JTextField(3);
 
 
+        this.saveButton = new JButton();
+        this.saveButton.setText("Save");
+        this.saveButton.setSize(50, 30);
+        this.saveButton.setBounds(165, 110, 65, 30);
+        this.saveButton.addActionListener(this);
 
+        this.loadButton = new JButton();
+        this.loadButton.setText("Load");
+        this.loadButton.setSize(50, 30);
+        this.loadButton.setBounds(165, 110, 65, 30);
+        this.loadButton.addActionListener(this);
 
-        saveButton = new JButton();
-        saveButton.setText("Save");
-        saveButton.setSize(50, 30);
-        saveButton.setBounds(165, 110, 65, 30);
-        saveButton.addActionListener(this);
+        this.addNodeButton = new JButton();
+        this.addNodeButton.setSize(50, 30);
+        this.addNodeButton.setBounds(165, 110, 65, 30);
+        this.addNodeButton.addActionListener(this);
 
-        loadButton = new JButton();
-        loadButton.setText("Load");
-        loadButton.setSize(50, 30);
-        loadButton.setBounds(165, 110, 65, 30);
-        loadButton.addActionListener(this);
+        this.removeNodeButton = new JButton();
+        this.removeNodeButton.setSize(50, 30);
+        this.removeNodeButton.setBounds(165, 110, 65, 30);
+        this.removeNodeButton.addActionListener(this);
 
-        addNodeButton = new JButton();
-        addNodeButton.setSize(50, 30);
-        addNodeButton.setBounds(165, 110, 65, 30);
-        addNodeButton.addActionListener(this);
+        this.addEdgeButton = new JButton();
+        this.addEdgeButton.setSize(50, 30);
+        this.addEdgeButton.setBounds(165, 110, 65, 30);
+        this.addEdgeButton.addActionListener(this);
 
-        removeNodeButton = new JButton();
-        removeNodeButton.setSize(50, 30);
-        removeNodeButton.setBounds(165, 110, 65, 30);
-        removeNodeButton.addActionListener(this);
+        this.removeEdgeButton = new JButton();
+        this.removeEdgeButton.setSize(50, 30);
+        this.removeEdgeButton.setBounds(165, 110, 65, 30);
+        this.removeEdgeButton.addActionListener(this);
 
-        addEdgeButton = new JButton();
-        addEdgeButton.setSize(50, 30);
-        addEdgeButton.setBounds(165, 110, 65, 30);
-        addEdgeButton.addActionListener(this);
+        this.isConnectedButton = new JButton();
+        this.isConnectedButton.setText("Done");
+        this.isConnectedButton.setSize(50, 30);
+        this.isConnectedButton.setBounds(165, 110, 65, 30);
+        this.isConnectedButton.addActionListener(this);
 
-        removeEdgeButton = new JButton();
-        removeEdgeButton.setSize(50, 30);
-        removeEdgeButton.setBounds(165, 110, 65, 30);
-        removeEdgeButton.addActionListener(this);
+        this.shortestPathButton = new JButton();
+        this.shortestPathButton.setText("Shortest Distance Way");
+        this.shortestPathButton.setSize(50, 30);
+        this.shortestPathButton.setBounds(165, 110, 65, 30);
+        this.shortestPathButton.addActionListener(this);
 
-        isConnectedButton = new JButton();
-        isConnectedButton.setText("Done");
-        isConnectedButton.setSize(50, 30);
-        isConnectedButton.setBounds(165, 110, 65, 30);
-        isConnectedButton.addActionListener(this);
-
-        shortestPathButton = new JButton();
-        shortestPathButton.setText("Shortest Distance Way");
-        shortestPathButton.setSize(50, 30);
-        shortestPathButton.setBounds(165, 110, 65, 30);
-        shortestPathButton.addActionListener(this);
-
-        shortestPathDistButton = new JButton();
-        shortestPathDistButton.setText("Shortest Distance");
-        shortestPathDistButton.setSize(50, 30);
-        shortestPathDistButton.setBounds(165, 110, 65, 30);
-        shortestPathDistButton.addActionListener(this);
+        this.shortestPathDistButton = new JButton();
+        this.shortestPathDistButton.setText("Shortest Distance");
+        this.shortestPathDistButton.setSize(50, 30);
+        this.shortestPathDistButton.setBounds(165, 110, 65, 30);
+        this.shortestPathDistButton.addActionListener(this);
 
 
 //        this.label = new JLabel("Click the menu bar to choose function");
@@ -246,20 +263,88 @@ public class graphWindow extends JFrame implements ActionListener {
         if (e.getSource() == this.save) {
             this.miniPanel.removeAll();
             saveFromUser.setText("");
-            this.miniLabel.setBounds(120,30,400,30);
+            this.miniLabel.setBounds(120, 30, 400, 30);
             this.miniLabel.setText("Enter full file location");
             this.miniPanel.add(saveButton);
             this.miniPanel.add(miniLabel);
             this.miniPanel.add(saveFromUser);
             this.miniFrame.add(this.miniPanel);
             this.miniFrame.setVisible(true);
-        } else if (e.getSource() == saveButton){
+        } else if (e.getSource() == saveButton) {
             this.miniFrame.dispose();
             String g1 = saveFromUser.getText();
             this.algo.save(g1);
+        } else if (e.getSource() == this.addNode) {
+            this.miniPanel.removeAll();
+            xFromUser.setText("");
+            yFromUser.setText("");
+            addNodeButton.setText("Enter location");
+            xFromUser.setSize(60, 30);
+            xFromUser.setBounds(130, 60, 60, 20);
+            yFromUser.setSize(60, 30);
+            yFromUser.setBounds(190, 60, 60, 20);
+            this.algo.init(this.graph);
+            this.miniPanel.add(addNodeButton);
+            this.miniPanel.add(miniLabel);
+            this.miniPanel.add(xFromUser);
+            this.miniPanel.add(yFromUser);
+            this.miniFrame.add(this.miniPanel);
+            this.miniFrame.setVisible(true);
+        } else if (e.getSource() == addNodeButton) {
+            miniPanel.removeAll();
+            this.xForGeo = Double.parseDouble(this.xFromUser.getText());
+            this.yForGeo = Double.parseDouble(this.yFromUser.getText());
+            NodeData node = new myNode();
+            node.setLocation(new myGeo((double) xForGeo, (double) yForGeo, (double) 0));
+            this.graph.addNode(node);
+            this.miniFrame.dispose();
+            System.out.println(node.getKey());
+            this.miniLabel.setText("Node " + node.getKey() + " was added succesfully!");
+            this.miniPanel.add(miniLabel);
+            this.miniFrame.add(miniPanel);
+            this.miniFrame.setLocationRelativeTo(this);
+            this.miniFrame.setVisible(true);
+        } else if (e.getSource() == this.removeNode) {
+            if (this.graph != null) {
+                this.miniPanel.removeAll();
+                this.miniLabel.setText("Enter the key number of node to remove:");
+                this.keyFromUser.setText("");
+//                this.keyForNode = Integer.parseInt(keyFromUser.getText());
+                this.removeNodeButton.setText("Remove");
+                this.miniPanel.add(this.removeNodeButton);
+//                this.graph.removeNode(keyForNode);
+                this.miniPanel.add(miniLabel);
+                this.miniPanel.add(keyFromUser);
+                this.miniFrame.add(this.miniPanel);
+                this.miniFrame.setLocationRelativeTo(this);
+                this.miniFrame.setVisible(true);
+            }
+        } else if (e.getSource() == this.removeNodeButton) {
+            this.miniPanel.removeAll();
+            this.keyForNode = Integer.parseInt(this.keyFromUser.getText());
+            if (this.graph.getNode(keyForNode) == null) {
+                this.miniLabel.setText("There is no such node");
+            } else {
+                this.miniLabel.setText(("Node " + keyForNode + " was removed"));
+                this.graph.removeNode(keyForNode);
+            }
+            this.miniPanel.add(this.miniLabel);
+            this.add(miniPanel);
+            this.miniFrame.add(miniPanel);
+            this.miniFrame.setSize(400, 200);
+            this.miniFrame.setLocationRelativeTo(this);
+            this.miniFrame.setVisible(true);
+
+        } else if (e.getSource() == this.addEdge) {
+
+        } else if (e.getSource() == this.addEdgeButton) {
+
+        } else if (e.getSource() == this.removeEdge) {
+
+        } else if (e.getSource() == this.removeEdgeButton) {
+
         } else if (e.getSource() == this.isConnected) {
             this.miniPanel.removeAll();
-//            this.miniPanel.add(isConnectedButton);
             this.miniLabel.setBounds(120, 50, 200, 50);
             if (this.algo.isConnected()) {
                 this.miniLabel.setText("The graph is connected!");
@@ -295,76 +380,52 @@ public class graphWindow extends JFrame implements ActionListener {
             this.miniPanel.add(srcFromUser);
             this.miniPanel.add(destFromUser);
             this.miniFrame.add(this.miniPanel);
-
-//            this.srcForShortest = Integer.parseInt(this.srcFromUser.getText());
-//            this.destForShortest = Integer.parseInt(this.destFromUser.getText());
             this.miniFrame.setLocationRelativeTo(this);
             this.miniFrame.setVisible(true);
         } else if (e.getSource() == this.shortestPathDistButton) {
-//            this.srcForShortest = Integer.parseInt(this.srcFromUser.getText());
-//            this.destForShortest = Integer.parseInt(this.destFromUser.getText());
             this.miniFrame.dispose();
+            srcForShortest = Integer.parseInt(srcFromUser.getText());
+            destForShortest = Integer.parseInt(destFromUser.getText());
+            if (this.graph.getNode(srcForShortest) == null) {
+                this.miniLabel.setText("there is no such src");
+            }
+            if (this.graph.getNode(destForShortest) == null) {
+                this.miniLabel.setText("there is no such dest");
+            }
             this.miniPanel.removeAll();
-            this.miniLabel.setText("The shortest Distance is " +
-                    this.algo.shortestPathDist(srcForShortest,destForShortest));
+            double distance = this.algo.shortestPathDist((int) srcForShortest, (int) destForShortest);
+            this.miniLabel.setText("The shortest Distance between Node " + srcForShortest
+                    + " and Node " + destForShortest + " is " + distance);
             this.miniLabel.setBounds(100, 30, 400, 20);
             this.miniPanel.add(miniLabel);
             this.miniFrame.add(miniPanel);
             this.miniFrame.setLocationRelativeTo(this);
             this.miniFrame.setVisible(true);
+        } else if (e.getSource() == this.shortestPathButton) {
+            this.miniFrame.dispose();
+            srcForShortest = Integer.parseInt(srcFromUser.getText());
+            destForShortest = Integer.parseInt(destFromUser.getText());
+            if (this.graph.getNode(srcForShortest) == null) {
+                this.miniLabel.setText("there is no such src");
+            }
+            if (this.graph.getNode(destForShortest) == null) {
+                this.miniLabel.setText("there is no such dest");
+            }
+            this.miniPanel.removeAll();
+            if (this.graph.getNode(srcForShortest) != null && this.graph.getNode(destForShortest) != null) {
+                java.util.List<NodeData> wayNodes = this.algo.shortestPath((int) srcForShortest, (int) destForShortest);
+                String txt = "The Shortest Way Is ";
+                for (int i = 0; i < wayNodes.size(); i++) {
+                    txt += wayNodes.get(i).getKey() + " ";
+                }
+                this.miniLabel.setText(txt);
+            }
+            this.miniPanel.add(miniLabel);
+            this.miniFrame.add(miniPanel);
+            this.miniFrame.setLocationRelativeTo(this);
+            this.miniFrame.setVisible(true);
         }
-
     }
-
-    ;
-
-
-//    public class myPanel extends JPanel {
-//        //        @Override
-//        ArrayList<GeoLocation> locations = new ArrayList<>();
-//
-//        public myPanel() {
-//            DirectedWeightedGraphAlgorithms algo = new DWGraphAlgorithms();
-//            algo.load("/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G1.json");
-//            DirectedWeightedGraph graph = algo.getGraph();
-//            Iterator<NodeData> itr = graph.nodeIter();
-//            while (itr.hasNext()) {
-//                NodeData tmp = itr.next();
-//                this.locations.add(tmp.getLocation());
-//            }
-//
-////            GeoLocation a = new myGeo(10,100,0);
-////            GeoLocation b = new myGeo(20,150,0);
-////            GeoLocation c = new myGeo(30,200,0);
-//////            this.locations.add(a);
-//////            this.locations.add(b);
-////            this.locations.add(c);
-//
-//        }
-//
-//        protected void paintComponent(Graphics g) {
-//            super.paintComponent(g);
-//            ArrayList<GeoLocation> arr = new ArrayList<>();
-//            DirectedWeightedGraphAlgorithms algo = new DWGraphAlgorithms();
-//            algo.load("/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G1.json");
-//            DirectedWeightedGraph graph = algo.getGraph();
-//            Iterator<NodeData> itr = graph.nodeIter();
-//            while (itr.hasNext()) {
-//                NodeData tmp = itr.next();
-//                arr.add(tmp.getLocation());
-//            }
-//            for (int i = 0; i < arr.size(); i++) {
-//                g.setColor(Color.BLACK);
-//                g.fillOval((int) arr.get(i).x(), (int) arr.get(i).y(), 10, 10);
-//            }
-////            for(GeoLocation geo : locations){
-////                g.setColor(Color.BLACK);
-////                g.fillOval((int)geo.x(),(int)geo.y(),10,10);
-////            }
-//
-//
-//        }
-//    }
 
 
     public static void main(String[] args) {
