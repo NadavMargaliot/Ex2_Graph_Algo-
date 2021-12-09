@@ -654,7 +654,7 @@ public class graphWindow extends JFrame implements ActionListener {
                 this.miniLabel.setText("there is no such dest");
             }
             this.miniPanel.removeAll();
-            double distance = this.algo.shortestPathDist((int) textValue1, (int) textValue2);
+            double distance = this.algo.shortestPathDist( textValue1,  textValue2);
             this.miniLabel.setText("The shortest Distance between Node " + textValue1
                     + " and Node " + textValue2 + " is " + distance);
             this.miniLabel.setBounds(100, 30, 400, 20);
@@ -681,7 +681,7 @@ public class graphWindow extends JFrame implements ActionListener {
             this.miniPanel.removeAll();
             if (this.graph.getNode(textValue1) != null && this.graph.getNode(textValue2) != null &&
                     this.algo.shortestPath(textValue1, textValue2) != null) {
-                java.util.List<NodeData> wayNodes = this.algo.shortestPath((int) textValue1, (int) textValue2);
+                java.util.List<NodeData> wayNodes = this.algo.shortestPath(textValue1,  textValue2);
                 String txt = "The Shortest Way Is ";
                 for (int i = 0; i < wayNodes.size(); i++) {
                     txt += wayNodes.get(i).getKey() + " ";
