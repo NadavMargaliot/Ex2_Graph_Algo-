@@ -75,9 +75,10 @@ public class graphWindow extends JFrame implements ActionListener {
                 edges.add(edgeItr.next());
             }
         }
-        public void makeShortestWay(ArrayList<NodeData> shortestWay){
+
+        public void makeShortestWay(ArrayList<NodeData> shortestWay) {
             this.shortest = new ArrayList<>(shortestWay.size());
-            while (!shortestWay.isEmpty()){
+            while (!shortestWay.isEmpty()) {
                 this.shortest.add(shortestWay.get(0));
                 shortestWay.remove(0);
             }
@@ -560,21 +561,28 @@ public class graphWindow extends JFrame implements ActionListener {
 //            this.miniFrame.setVisible(true);
 
 
-            textValue1 = Integer.parseInt(aFromUser.getText());
-            textValue2 = Integer.parseInt(bFromUser.getText());
+            textValue1 = (Double) Double.parseDouble(aFromUser.getText());
+            textValue2 = (Double) Double.parseDouble(bFromUser.getText());
             GeoLocation temp = new myGeo(textValue1, textValue2, 1);
-            NodeData tempNode = new myNode(this.graph.nodeSize(), temp);
-            this.graph.addNode(tempNode);
-            this.miniFrame.dispose();
-            this.miniLabel.setText("Node " + tempNode.getKey() + " was added succesfully!");
-            this.panel.add(label);
-            panel.setNew();
-            panel.repaint();
-            this.add(panel);
-            System.out.println(this.graph.nodeSize());
-            label.setText("Vertex was added successfully");
-//            this.add(label);
-//            this.add(panel);
+            if (temp != null) {
+                NodeData tempNode = new myNode(this.graph.nodeSize(), temp);
+                this.graph.addNode(tempNode);
+                this.miniFrame.dispose();
+                this.label.setText("Node " + tempNode.getKey() + " was added succesfully!");
+                this.panel.add(label);
+                panel.setNew();
+                panel.repaint();
+                this.add(panel);
+                System.out.println(this.graph.nodeSize());
+            } else {
+                this.miniFrame.dispose();
+                this.label.setText("Please enter X and Y to add a node");
+                this.panel.add(label);
+                panel.setNew();
+                panel.repaint();
+                this.add(panel);
+                System.out.println(this.graph.nodeSize());
+            }
 
 
 //             the remove Node action
@@ -694,8 +702,8 @@ public class graphWindow extends JFrame implements ActionListener {
                 this.graph.removeEdge((int) textValue1, (int) textValue2);
                 this.label.setText("The EDGE has been removed");
                 this.panel.add(this.label);
-                this.panel.setNew();
-                this.panel.repaint();
+                panel.setNew();
+                panel.repaint();
                 this.add(panel);
 
             }
@@ -767,23 +775,20 @@ public class graphWindow extends JFrame implements ActionListener {
             this.miniFrame.dispose();
             textValue1 = Integer.parseInt(aFromUser.getText());
             textValue2 = Integer.parseInt(bFromUser.getText());
-            if(this.algo.shortestPath((int)textValue1 , (int)textValue2) == null){
-                this.label.setText("There is no path between "+ textValue1+" and "+textValue2);
+            if (this.algo.shortestPath((int) textValue1, (int) textValue2) == null) {
+                this.label.setText("There is no path between " + textValue1 + " and " + textValue2);
                 this.panel.add(label);
                 this.add(panel);
-            }else{
-                this.shortestWay = this.algo.shortestPath((int)textValue1,(int)textValue2);
+            } else {
+                this.shortestWay = this.algo.shortestPath((int) textValue1, (int) textValue2);
                 this.panel.makeShortestWay((ArrayList<NodeData>) this.shortestWay);
-                double distance = this.algo.shortestPathDist((int)textValue1,(int)textValue2);
-                this.label.setText("The shortest path between "+ textValue1+" and "+textValue2+" is "+ distance);
+                double distance = this.algo.shortestPathDist((int) textValue1, (int) textValue2);
+                this.label.setText("The shortest path between " + textValue1 + " and " + textValue2 + " is " + distance);
                 this.panel.add(label);
                 this.panel.setNew();
                 this.panel.repaint();
                 this.add(panel);
             }
-
-
-
 
 
 //
