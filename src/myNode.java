@@ -10,6 +10,15 @@ public class myNode implements NodeData {
     private double weight;
 
 
+    public myNode(int key , GeoLocation geo){
+        this.key = key;
+        this.info = null;
+        this.tag = 0;
+        this.location = geo;
+        this.weight = Double.POSITIVE_INFINITY;
+
+    }
+
     public myNode() {
         this.key = id++;
         this.info = null;
