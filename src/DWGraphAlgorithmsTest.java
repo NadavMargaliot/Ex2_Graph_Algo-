@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 class DWGraphAlgorithmsTest {
     DWGraph g = new DWGraph();
     NodeData node1 = new myNode(1);
