@@ -15,23 +15,23 @@ Representing a edge bewteen two nodes in the graph.
 Representing a point3d of the node.
 ### DWGraph:
 Representing a graph with those methods:
-Get Node.
-Get Edge.
-Add Node.
-Connect.
-Node Iterator.
-Edge Iterator.
-Remove Node.
-Remove Edge.
+#### Get Node.
+#### Get Edge.
+#### Add Node.
+#### Connect.
+#### Node Iterator.
+#### Edge Iterator.
+#### Remove Node.
+#### Remove Edge.
 ### DWGraphAlgorithms:
 Representing all the algorithms that will run on the graph with those methods:
-Is connected.
-Shortest path distance.
-Shortest path nodes.
-Center.
-TSP.
-Save to JSON.
-Load from JSON.
+#### Is connected.
+#### Shortest path distance.
+#### Shortest path nodes.
+#### Center.
+#### TSP.
+#### Save to JSON.
+#### Load from JSON.
 ### GraphWindow:
-Representing the Gui.
+#### Representing the Gui.
 
