@@ -54,6 +54,7 @@ public class graphWindow extends JFrame implements ActionListener {
     double maxX;
     double minY;
     double maxY;
+    int centerNode;
     java.util.List shortestWay = new ArrayList<>();
     ArrayList<NodeData> locationsList = new ArrayList<>();
 
@@ -110,9 +111,6 @@ public class graphWindow extends JFrame implements ActionListener {
             return null;
         }
 
-        protected void paintComponentShortest(Graphics g) {
-            super.paintComponent(g);
-        }
 
         @Override
         protected void paintComponent(Graphics g) {
@@ -121,8 +119,13 @@ public class graphWindow extends JFrame implements ActionListener {
                 NodeData temp = this.nodes.get(i);
                 int xPixel = (int) scaleX(temp.getLocation().x());
                 int yPixel = (int) scaleY(temp.getLocation().y());
-                g.setColor(Color.BLUE);
-                g.fillOval(xPixel, yPixel, 22, 22);
+                if(temp.getKey() == centerNode){
+                    g.setColor(Color.ORANGE);
+                    g.fillOval(xPixel, yPixel, 22, 22);
+                }else{
+                    g.setColor(Color.BLUE);
+                    g.fillOval(xPixel, yPixel, 22, 22);
+                }
                 g.setColor(Color.BLACK);
                 g.drawString("Key:" + temp.getKey(), xPixel - 10, yPixel + 35);
             }
@@ -134,8 +137,13 @@ public class graphWindow extends JFrame implements ActionListener {
                 double yFrom = scaleY(currFrom.getLocation().y());
                 double xTo = scaleX(currTo.getLocation().x());
                 double yTo = scaleY(currTo.getLocation().y());
-                g.setColor(Color.RED);
-                g.drawLine((int) (xFrom + 12), (int) (yFrom + 12), (int) (xTo + 12), (int) (yTo + 12));
+                if(this.shortest.contains(currFrom) && this.shortest.contains(currTo)){
+                    g.setColor(Color.GREEN);
+                    g.drawLine((int) (xFrom + 12), (int) (yFrom + 12), (int) (xTo + 12), (int) (yTo + 12));
+                }else{
+                    g.setColor(Color.RED);
+                    g.drawLine((int) (xFrom + 12), (int) (yFrom + 12), (int) (xTo + 12), (int) (yTo + 12));
+                }
             }
         }
 
@@ -727,11 +735,12 @@ public class graphWindow extends JFrame implements ActionListener {
 //             the center action
         } else if (e.getSource() == this.center) {
             this.miniPanel.removeAll();
-            this.miniLabel.setText("The center source number is " + this.algo.center().getKey());
-            this.miniPanel.add(miniLabel);
-            this.miniFrame.add(miniPanel);
-            this.miniFrame.setLocationRelativeTo(this);
-            this.miniFrame.setVisible(true);
+            this.centerNode = this.algo.center().getKey();
+            this.label.setText("The center source number is " + this.centerNode);
+            this.panel.add(label);
+            this.panel.setNew();
+            this.panel.repaint();
+            this.add(panel);
 
 //             the shortest path action
         } else if (e.getSource() == this.shortestPath) {
