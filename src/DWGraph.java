@@ -20,7 +20,6 @@ public class DWGraph implements DirectedWeightedGraph {
     }
 
 
-
     @Override
     public NodeData getNode(int key) {
         if (this.vertices.containsKey(key)) {
@@ -30,10 +29,7 @@ public class DWGraph implements DirectedWeightedGraph {
     }
 
     public boolean edgeBetween(int src, int dest) {
-        if (this.neighbors.get(src) == null || this.neighbors.get(src).get(dest) == null) {
-            return false;
-        }
-        return true;
+        return this.neighbors.get(src) != null && this.neighbors.get(src).get(dest) != null;
     }
 
     @Override
@@ -83,12 +79,12 @@ public class DWGraph implements DirectedWeightedGraph {
         ArrayList<EdgeData> edgeDataArrayList = new ArrayList<>();
         Set<Integer> sourceSet = this.neighbors.keySet();
         Iterator<Integer> iterSource = sourceSet.iterator();
-        for(Object i : sourceSet) {
+        for (Object i : sourceSet) {
             int tmpSource = iterSource.next();
             if (this.neighbors.get(tmpSource) != null) {
                 Set<Integer> destSet = this.neighbors.get(tmpSource).keySet();
                 Iterator<Integer> iterDest = destSet.iterator();
-                for(Object j : destSet) {
+                for (Object j : destSet) {
                     int tmpDest = iterDest.next();
                     edgeDataArrayList.add(this.neighbors.get(tmpSource).get(tmpDest));
                 }
@@ -116,7 +112,7 @@ public class DWGraph implements DirectedWeightedGraph {
         this.edgeSize -= size;
         Set<Integer> sourceSet = this.neighbors.keySet();
         Iterator<Integer> it = sourceSet.iterator();
-        for(Object i : sourceSet) {
+        for (Object i : sourceSet) {
             int representIt = it.next();
             if (edgeBetween(representIt, key)) {
                 removeEdge(representIt, key);

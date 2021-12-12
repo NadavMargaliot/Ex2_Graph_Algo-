@@ -10,7 +10,7 @@ public class myNode implements NodeData {
     private double weight;
 
 
-    public myNode(int key , GeoLocation geo){
+    public myNode(int key, GeoLocation geo) {
         this.key = key;
         this.info = null;
         this.tag = 0;
@@ -26,7 +26,8 @@ public class myNode implements NodeData {
         this.location = new myGeo();
         this.weight = Double.POSITIVE_INFINITY;
     }
-    public myNode(int key , String info , int tag , GeoLocation location){
+
+    public myNode(int key, String info, int tag, GeoLocation location) {
         this.key = key;
         this.info = info;
         this.tag = tag;
@@ -41,8 +42,9 @@ public class myNode implements NodeData {
         this.location = new myGeo();
         this.weight = Double.POSITIVE_INFINITY;
     }
-    public myNode (myNode other){
-        if (other != null){
+
+    public myNode(myNode other) {
+        if (other != null) {
             this.key = other.key;
             this.info = other.info;
             this.tag = other.tag;

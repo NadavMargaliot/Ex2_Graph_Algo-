@@ -212,7 +212,7 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
         double resPlaceInMap = Double.POSITIVE_INFINITY;
         HashMap<Double, NodeData> nodesMap = new HashMap<>();
         double maxDist = 0;
-        double dist = 0;
+        double dist;
         Iterator<NodeData> nodes = this.graph.nodeIter();
         Iterator<NodeData> goToNodes = this.graph.nodeIter();
         while (nodes.hasNext()) {
@@ -239,31 +239,30 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
     public List<NodeData> tsp(List<NodeData> cities) {
         double min = Double.POSITIVE_INFINITY;
         List<NodeData> path = new ArrayList<>();
-        for (Iterator<NodeData> fromNode = cities.listIterator(); fromNode.hasNext(); ) {
-            NodeData curr = fromNode.next();
+        for (NodeData curr : cities) {
             Comparator<NodeData> lessWeight = new Comparator<>() {
                 @Override
-                public int compare(NodeData node1, NodeData node2 ) {
+                public int compare(NodeData node1, NodeData node2) {
                     return Double.compare(shortestPathDist(curr.getKey(), node1.getKey()),
-                            shortestPathDist(curr.getKey() ,node2.getKey()));
+                            shortestPathDist(curr.getKey(), node2.getKey()));
                 }
             };
             PriorityQueue<NodeData> sp = new PriorityQueue<>(lessWeight);
-            for (Iterator<NodeData> toNode = cities.listIterator(); toNode.hasNext();){
-                NodeData tmp = toNode.next();
-                if(curr.getKey() != tmp.getKey())
+            for (NodeData tmp : cities) {
+                if (curr.getKey() != tmp.getKey())
                     sp.add(tmp);
             }
             double sum = 0;
             List<NodeData> checkpath = new ArrayList<>();
             NodeData tt = curr;
             checkpath.add(curr);
-            while (!sp.isEmpty()){
-                sum = sum + shortestPathDist(tt.getKey(),sp.peek().getKey());
+            while (!sp.isEmpty()) {
+                assert tt != null;
+                sum = sum + shortestPathDist(tt.getKey(), sp.peek().getKey());
                 tt = sp.peek();
                 checkpath.add(sp.poll());
             }
-            if(sum<min){
+            if (sum < min) {
                 min = sum;
                 path = checkpath;
             }
@@ -275,9 +274,9 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
 
     public boolean save(String file) {
         try {
-            JsonObject edgesObject = new JsonObject();
+            JsonObject edgesObject;
             JsonArray Edges = new JsonArray();
-            JsonObject nodeObject = new JsonObject();
+            JsonObject nodeObject;
             JsonArray Nodes = new JsonArray();
             JsonObject AllObj = new JsonObject();
             ArrayList<NodeData> nodeArray = new ArrayList<>();
@@ -298,18 +297,16 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
                     edgesObject.addProperty("dest", e.getDest());
                     JsonObject ob = edgesObject.deepCopy();
                     Edges.add(ob);
-
                 }
             }
             AllObj.add("Edges", Edges);
-
             for (NodeData i : nodeArray) {
                 nodeObject = new JsonObject();
-                String s = "" + i.getLocation();
+                String s = "" + i.getLocation().x() + "," + i.getLocation().y() + "," + i.getLocation().z();
+
                 nodeObject.addProperty("pos", s);
                 nodeObject.addProperty("id", i.getKey());
                 Nodes.add(nodeObject);
-                s = "";
             }
             AllObj.add("Nodes", Nodes);
             try {
@@ -327,7 +324,6 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
     }
 
     @Override
-
     public boolean load(String file) {
         try {
             DirectedWeightedGraph loaded = new DWGraph();
@@ -335,15 +331,10 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
             JsonParser jsonParser = new JsonParser();
             FileReader reader = new FileReader(file);
             Object obj = jsonParser.parse(reader);
-
-
-            JsonObject vertex = new JsonObject();
-            JsonObject edges = new JsonObject();
+            JsonObject vertex;
+            JsonObject edges;
             JsonObject jsonObject = (JsonObject) obj;
-
-
             JsonArray vertexArray = jsonObject.getAsJsonArray("Nodes");
-
             for (int i = 0; i < vertexArray.size(); i++) {
                 vertex = vertexArray.get(i).getAsJsonObject();
                 int n = vertex.get("id").getAsInt();
@@ -353,7 +344,6 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
                 node.setLocation(new myGeo(Double.parseDouble(s[0]), Double.parseDouble(s[1]), Double.parseDouble(s[2])));
                 loaded.addNode(node);
             }
-
             JsonArray edgesArray = jsonObject.getAsJsonArray("Edges");
             for (int i = 0; i < edgesArray.size(); i++) {
                 edges = edgesArray.get(i).getAsJsonObject();
@@ -363,8 +353,6 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
                 loaded.connect(src, dest, w);
             }
             this.graph = loaded;
-
-
         } catch (FileNotFoundException | JsonIOException e) {
             e.printStackTrace();
         }

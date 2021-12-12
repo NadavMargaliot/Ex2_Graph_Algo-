@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 class DWGraphAlgorithmsTest {
     String G1 = "/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G1.json";
     String G2 = "/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G2.json";
@@ -99,8 +100,8 @@ class DWGraphAlgorithmsTest {
 
     @Test
     void shortestPathDist() {
- //       g1000.load(G1000);
- //       g10000.load(G10000);
+        //       g1000.load(G1000);
+        //       g10000.load(G10000);
 //        g100000.load(G100000);
 //
 //        g100000.shortestPathDist(0,99999);
@@ -134,7 +135,6 @@ class DWGraphAlgorithmsTest {
         assertEquals(4, graphAlgorithms.shortestPathDist(a.getKey(), e.getKey()));
         assertEquals(-1, graphAlgorithms.shortestPathDist(a.getKey(), h.getKey()));
         assertEquals(-1, graphAlgorithms.shortestPathDist(b.getKey(), h.getKey()));
-
 
 
         DirectedWeightedGraph rr = new DWGraph();
@@ -224,7 +224,6 @@ class DWGraphAlgorithmsTest {
 //        g1000.center();
 
 
-
     }
 
     @Test
@@ -264,7 +263,7 @@ class DWGraphAlgorithmsTest {
         graphAlgorithms.init(g);
         aa = graphAlgorithms.tsp(aa);
         List<NodeData> bb = List.of(new NodeData[]{a, c, b, d});
-        assertEquals(aa,bb);
+        assertEquals(aa, bb);
     }
 
     @Test
@@ -299,7 +298,7 @@ class DWGraphAlgorithmsTest {
     void load() {
         DirectedWeightedGraphAlgorithms algo = new DWGraphAlgorithms();
         algo.load("/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G1.json");
-        assertEquals(17 , algo.getGraph().nodeSize());
-        assertEquals(35.21007339305892 , algo.getGraph().getNode(3).getLocation().x());
+        assertEquals(17, algo.getGraph().nodeSize());
+        assertEquals(35.21007339305892, algo.getGraph().getNode(3).getLocation().x());
     }
 }

@@ -7,7 +7,7 @@ public class myEdge implements EdgeData {
     private String info;
     private int tag;
 
-    public myEdge(int src , int dest , double weight , int tag , String info){
+    public myEdge(int src, int dest, double weight, int tag, String info) {
         this.src = src;
         this.dest = dest;
         this.weight = weight;
@@ -15,7 +15,7 @@ public class myEdge implements EdgeData {
         this.info = info;
     }
 
-    public myEdge(int src , int dest , double weight){
+    public myEdge(int src, int dest, double weight) {
         this.src = src;
         this.dest = dest;
         this.weight = weight;

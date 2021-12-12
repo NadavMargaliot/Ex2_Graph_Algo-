@@ -136,7 +136,7 @@ public class graphWindow extends JFrame implements ActionListener {
                 double xTo = scaleX(currTo.getLocation().x()) + 10;
                 double yTo = scaleY(currTo.getLocation().y()) + 40;
                 double weight = temp.getWeight();
-                String weightStr = String.format("%.3f",weight);
+                String weightStr = String.format("%.3f", weight);
                 if (this.shortest.contains(currFrom) && this.shortest.contains(currTo)) {
                     g.setColor(Color.GREEN);
                 } else {
@@ -144,8 +144,8 @@ public class graphWindow extends JFrame implements ActionListener {
                 }
                 drawArrowLine(g, (int) (xFrom + 7), (int) (yFrom + 7), (int) (xTo + 7), (int) (yTo + 7), 5, 5);
                 g.setColor(Color.black);
-                g.setFont(new Font("Ariel" , Font.BOLD,9));
-                g.drawString(weightStr, (int)((xFrom * 0.3) + (xTo * 0.7)),  (int)((yFrom * 0.3) + (yTo * 0.7)));
+                g.setFont(new Font("Ariel", Font.BOLD, 9));
+                g.drawString(weightStr, (int) ((xFrom * 0.3) + (xTo * 0.7)), (int) ((yFrom * 0.3) + (yTo * 0.7)));
             }
         }
 
@@ -174,7 +174,7 @@ public class graphWindow extends JFrame implements ActionListener {
         this.miniPanel = new JPanel();
         this.miniFrame = new JFrame();
         this.label = new JLabel("Click the menu bar to choose function");
-        this.label.setBounds(width / 2,height,width/2,height);
+        this.label.setBounds(width / 2, height, width / 2, height);
         this.miniFrame.setSize(200, 100);
         this.algo = algorithm;
         this.graph = algo.getGraph();
@@ -409,7 +409,7 @@ public class graphWindow extends JFrame implements ActionListener {
         } else if (e.getSource() == addNodeButton) {
             textValue1 = Double.parseDouble(aFromUser.getText());
             textValue2 = Double.parseDouble(bFromUser.getText());
-            GeoLocation temp = new myGeo(textValue1, textValue2, 1);
+            GeoLocation temp = new myGeo(textValue1, textValue2, 0);
             NodeData tempNode = new myNode(this.graph.nodeSize(), temp);
             this.graph.addNode(tempNode);
             this.miniFrame.dispose();
@@ -449,7 +449,6 @@ public class graphWindow extends JFrame implements ActionListener {
                 panel.update();
                 panel.repaint();
                 this.add(panel);
-                System.out.println(this.graph.nodeSize());
             }
 
 //             the add Edge action
@@ -611,11 +610,6 @@ public class graphWindow extends JFrame implements ActionListener {
             } else {
                 this.miniLabel.setText("Please add a valid node or click Done");
             }
-            StringBuilder res = new StringBuilder();
-            for (NodeData nodeData : tspList) {
-                res.append(nodeData.getKey()).append(" ");
-            }
-            System.out.println(res);
             this.aFromUser.setText("");
             this.miniFrame.add(this.miniPanel);
             this.miniFrame.setLocationRelativeTo(this);
@@ -638,18 +632,4 @@ public class graphWindow extends JFrame implements ActionListener {
             this.add(panel);
         }
     }
-
-    public static void main(String[] args) {
-        DirectedWeightedGraphAlgorithms algo = new DWGraphAlgorithms();
-        try {
-            algo.load("/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G3.json");
-            String saveGraph = "/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/graph.json";
-            new graphWindow(algo);
-        } catch (Exception e) {
-            System.out.println("fail");
-        }
-
-
-    }
-
 }
