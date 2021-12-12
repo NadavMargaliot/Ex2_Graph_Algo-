@@ -19,6 +19,8 @@ public class DWGraph implements DirectedWeightedGraph {
         this.neighbors = new HashMap<>();
     }
 
+
+
     @Override
     public NodeData getNode(int key) {
         if (this.vertices.containsKey(key)) {

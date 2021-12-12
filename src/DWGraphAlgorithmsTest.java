@@ -8,6 +8,18 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 class DWGraphAlgorithmsTest {
+    String G1 = "/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G1.json";
+    String G2 = "/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G2.json";
+    String G3 = "/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G3.json";
+    String G1000 = "/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G4_1000.json";
+    String G10000 = "/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G5_10000.json";
+    String G100000 = "/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G6_100000.json";
+    DWGraphAlgorithms g1 = new DWGraphAlgorithms();
+    DWGraphAlgorithms g2 = new DWGraphAlgorithms();
+    DWGraphAlgorithms g3 = new DWGraphAlgorithms();
+    DWGraphAlgorithms g1000 = new DWGraphAlgorithms();
+    DWGraphAlgorithms g10000 = new DWGraphAlgorithms();
+    DWGraphAlgorithms g100000 = new DWGraphAlgorithms();
     DWGraph g = new DWGraph();
     NodeData node1 = new myNode(1);
     NodeData node2 = new myNode(2);
@@ -33,6 +45,12 @@ class DWGraphAlgorithmsTest {
 
     @Test
     void isConnected() {
+        g1.load(G1);
+        g2.load(G2);
+        g3.load(G3);
+//        g1000.load(G1000);
+//        g10000.load(G10000);
+//        g100000.load(G100000);
         DWGraph gr = new DWGraph();
         gr.addNode(node1);
         gr.addNode(node2);
@@ -46,6 +64,12 @@ class DWGraphAlgorithmsTest {
         DWGraphAlgorithms graphAlgorithms = new DWGraphAlgorithms();
         graphAlgorithms.init(gr);
         assertTrue(graphAlgorithms.isConnected());
+        assertTrue(g1.isConnected());
+        assertTrue(g2.isConnected());
+        assertTrue(g3.isConnected());
+//        assertTrue(g1000.isConnected());
+//       assertTrue(g10000.isConnected());
+//        assertTrue(g100000.isConnected());
 
 
         NodeData a = new myNode(1);
@@ -75,6 +99,12 @@ class DWGraphAlgorithmsTest {
 
     @Test
     void shortestPathDist() {
+ //       g1000.load(G1000);
+ //       g10000.load(G10000);
+//        g100000.load(G100000);
+//
+//        g100000.shortestPathDist(0,99999);
+
         NodeData a = new myNode(1);
         NodeData b = new myNode(2);
         NodeData c = new myNode(3);
@@ -130,6 +160,14 @@ class DWGraphAlgorithmsTest {
 
     @Test
     void shortestPath() {
+
+//        g1000.load(G1000);
+//        g10000.load(G10000);
+//        g100000.load(G100000);
+//
+//        g100000.shortestPath(0, 99999);
+
+
         NodeData a = new myNode(1);
         NodeData b = new myNode(2);
         NodeData c = new myNode(3);
@@ -180,12 +218,26 @@ class DWGraphAlgorithmsTest {
         algo3.load("/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G3.json");
         System.out.println("G3 " + algo3.center().getKey());
 
+//        g1000.load(G1000);
+////        g10000.load(G10000);
+////        g100000.load(G100000);
+//        g1000.center();
+
 
 
     }
 
     @Test
     void tsp() {
+
+//        g1000.load(G1000);
+//        ArrayList<NodeData> nodes = new ArrayList<>();
+//        while (g1000.getGraph().nodeIter().hasNext()){
+//            nodes.add(g1000.getGraph().nodeIter().next());
+//        }
+//        g1000.tsp(nodes);
+
+
         DWGraph g = new DWGraph();
         NodeData a = new myNode(1);
         NodeData b = new myNode(2);

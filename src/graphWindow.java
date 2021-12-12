@@ -2,10 +2,10 @@ import api.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
-
 
 public class graphWindow extends JFrame implements ActionListener {
     myPanel panel;
@@ -16,7 +16,7 @@ public class graphWindow extends JFrame implements ActionListener {
     JLabel miniLabel;
     JFrame miniFrame;
     JPanel miniPanel;
-    JMenuBar menu;
+    JMenuBar mb;
     JMenu editGraph;
     JMenu algorithm;
     JMenu saveLoad;
@@ -36,9 +36,9 @@ public class graphWindow extends JFrame implements ActionListener {
     JButton removeNodeButton;
     JButton addEdgeButton;
     JButton removeEdgeButton;
-    JButton isConnectedButton;
     JButton shortestPathButton;
-    JButton shortestPathDistButton;
+    JButton addNodeForTSP;
+    JButton doneTSP;
     JTextField saveLoadFromUser;
     JTextField aFromUser;
     JTextField bFromUser;
@@ -46,17 +46,14 @@ public class graphWindow extends JFrame implements ActionListener {
     double textValue1;
     double textValue2;
     double textValue3;
-    double xForGeo;
-    double yForGeo;
     int width;
     int height;
     double minX;
     double maxX;
     double minY;
     double maxY;
-    int centerNode;
-    java.util.List shortestWay = new ArrayList<>();
-    ArrayList<NodeData> locationsList = new ArrayList<>();
+    java.util.List<NodeData> tspList = new ArrayList<>();
+    java.util.List<NodeData> shortestWay = new ArrayList<>();
 
     public class myPanel extends JPanel {
         ArrayList<NodeData> nodes = new ArrayList<>();
@@ -64,9 +61,11 @@ public class graphWindow extends JFrame implements ActionListener {
         ArrayList<NodeData> shortest = new ArrayList<>();
         Iterator<NodeData> nodeItr;
         Iterator<EdgeData> edgeItr;
+        int centerNode;
 
         public myPanel() {
             super();
+            this.centerNode = -1;
             this.nodeItr = algo.getGraph().nodeIter();
             this.edgeItr = algo.getGraph().edgeIter();
             while (nodeItr.hasNext()) {
@@ -85,7 +84,7 @@ public class graphWindow extends JFrame implements ActionListener {
             }
         }
 
-        public void setNew() {
+        public void update() {
             this.nodeItr = graph.nodeIter();
             this.edgeItr = graph.edgeIter();
             this.nodes = new ArrayList<>();
@@ -94,19 +93,19 @@ public class graphWindow extends JFrame implements ActionListener {
                 this.nodes.add(nodeItr.next());
             }
             while (edgeItr.hasNext()) {
-                this.edges.add((EdgeData) edgeItr.next());
+                this.edges.add(edgeItr.next());
             }
-//            while (!this.shortest.isEmpty()){
-//                this.shortest.remove(0);
-//            }
-
+            while (!this.shortest.isEmpty()) {
+                this.shortest.remove(0);
+            }
+            this.centerNode = -1;
         }
 
 
         private NodeData NodeLocation(int key) {
-            for (int i = 0; i < this.nodes.size(); i++) {
-                if (this.nodes.get(i).getKey() == key)
-                    return nodes.get(i);
+            for (NodeData node : this.nodes) {
+                if (node.getKey() == key)
+                    return node;
             }
             return null;
         }
@@ -115,35 +114,38 @@ public class graphWindow extends JFrame implements ActionListener {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            for (int i = 0; i < this.nodes.size(); i++) {
-                NodeData temp = this.nodes.get(i);
-                int xPixel = (int) scaleX(temp.getLocation().x());
-                int yPixel = (int) scaleY(temp.getLocation().y());
-                if(temp.getKey() == centerNode){
-                    g.setColor(Color.ORANGE);
-                    g.fillOval(xPixel, yPixel, 22, 22);
-                }else{
-                    g.setColor(Color.BLUE);
-                    g.fillOval(xPixel, yPixel, 22, 22);
+            for (NodeData temp : this.nodes) {
+                int xPixel = (int) scaleX(temp.getLocation().x()) + 10;
+                int yPixel = (int) scaleY(temp.getLocation().y()) + 40;
+                if (temp.getKey() == this.centerNode) {
+                    g.setColor(Color.RED);
+                } else {
+                    g.setColor(Color.YELLOW);
                 }
-                g.setColor(Color.BLACK);
-                g.drawString("Key:" + temp.getKey(), xPixel - 10, yPixel + 35);
+                g.fillOval(xPixel, yPixel, 15, 15);
+                g.setColor(Color.blue);
+                g.drawString("" + temp.getKey(), xPixel, yPixel + 25);
             }
-            for (int i = 0; i < this.edges.size(); i++) {
-                EdgeData temp = this.edges.get(i);
+            for (EdgeData temp : this.edges) {
                 NodeData currFrom = NodeLocation(temp.getSrc());
                 NodeData currTo = NodeLocation(temp.getDest());
-                double xFrom = scaleX(currFrom.getLocation().x());
-                double yFrom = scaleY(currFrom.getLocation().y());
-                double xTo = scaleX(currTo.getLocation().x());
-                double yTo = scaleY(currTo.getLocation().y());
-                if(this.shortest.contains(currFrom) && this.shortest.contains(currTo)){
+                assert currFrom != null;
+                double xFrom = scaleX(currFrom.getLocation().x()) + 10;
+                double yFrom = scaleY(currFrom.getLocation().y()) + 40;
+                assert currTo != null;
+                double xTo = scaleX(currTo.getLocation().x()) + 10;
+                double yTo = scaleY(currTo.getLocation().y()) + 40;
+                double weight = temp.getWeight();
+                String weightStr = String.format("%.3f",weight);
+                if (this.shortest.contains(currFrom) && this.shortest.contains(currTo)) {
                     g.setColor(Color.GREEN);
-                    g.drawLine((int) (xFrom + 12), (int) (yFrom + 12), (int) (xTo + 12), (int) (yTo + 12));
-                }else{
-                    g.setColor(Color.RED);
-                    g.drawLine((int) (xFrom + 12), (int) (yFrom + 12), (int) (xTo + 12), (int) (yTo + 12));
+                } else {
+                    g.setColor(Color.MAGENTA);
                 }
+                drawArrowLine(g, (int) (xFrom + 7), (int) (yFrom + 7), (int) (xTo + 7), (int) (yTo + 7), 5, 5);
+                g.setColor(Color.black);
+                g.setFont(new Font("Ariel" , Font.BOLD,9));
+                g.drawString(weightStr, (int)((xFrom * 0.3) + (xTo * 0.7)),  (int)((yFrom * 0.3) + (yTo * 0.7)));
             }
         }
 
@@ -152,38 +154,17 @@ public class graphWindow extends JFrame implements ActionListener {
             double D = Math.sqrt(dx * dx + dy * dy);
             double xm = D - d, xn = xm, ym = h, yn = -h, x;
             double sin = dy / D, cos = dx / D;
-
             x = xm * cos - ym * sin + x1;
             ym = xm * sin + ym * cos + y1;
             xm = x;
-
             x = xn * cos - yn * sin + x1;
             yn = xn * sin + yn * cos + y1;
             xn = x;
-
             int[] xpoints = {x2, (int) xm, (int) xn};
             int[] ypoints = {y2, (int) ym, (int) yn};
-
             g.drawLine(x1, y1, x2, y2);
             g.fillPolygon(xpoints, ypoints, 3);
         }
-
-
-//        @Override
-//        protected void paintComponent(Graphics g) {
-//            super.paintComponent(g);
-////            scaleGraph();
-//            for (int i = 0; i < this.nodes.size(); i++) {
-//                NodeData curr = this.nodes.get(i);
-//                int x = (int) scaleX(curr.getLocation().x());
-//                int y = (int) scaleY(curr.getLocation().y());
-//                g.setColor(Color.RED);
-//                g.fillOval(x, y, 10, 10);
-//                g.setColor(Color.BLACK);
-//                g.drawString("Key" + curr.getKey(), x - 5, y - 5);
-//            }
-//            System.out.println(this.nodes.size());
-//        }
     }
 
 
@@ -192,95 +173,28 @@ public class graphWindow extends JFrame implements ActionListener {
         this.miniLabel = new JLabel();
         this.miniPanel = new JPanel();
         this.miniFrame = new JFrame();
+        this.label = new JLabel("Click the menu bar to choose function");
+        this.label.setBounds(width / 2,height,width/2,height);
         this.miniFrame.setSize(200, 100);
-        String G1 = "/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G1.json";
         this.algo = algorithm;
-        this.algo.load(G1);
         this.graph = algo.getGraph();
-        this.panel = new myPanel();
-        this.add(panel);
         this.miniPanel.setSize(400, 200);
         this.miniFrame.setSize(500, 200);
-
-
-        Iterator<NodeData> itr = this.algo.getGraph().nodeIter();
-        while (itr.hasNext()) {
-            NodeData tmp = itr.next();
-            this.locationsList.add(tmp);
-        }
-//        this.panel.setNew();
-//        this.panel.repaint();
-//        this.add(panel);
         this.screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.width = this.screenSize.width / 2;
         this.height = this.screenSize.height / 2;
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(width, height);
+        this.setSize(width + 50, height + 150);
         this.setTitle("Directed Weighted Graph");
-//        String G1 = "/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G1.json";
-//        this.algo.load(G1);
-//        this.graph = this.algo.getGraph();
         this.minX = minX();
         this.minY = minY();
         this.maxX = maxX();
         this.maxY = maxY();
-        createMenuBar();
-        //   addButtons();
-
+        createMenu();
+        this.panel = new myPanel();
+        this.panel.add(this.label);
+        this.add(panel);
         this.setVisible(true);
-
-
-    }
-
-    public void addButtons() {
-
-        this.saveButton = new JButton();
-        this.saveButton.setText("Save");
-        this.saveButton.setSize(50, 30);
-        this.saveButton.setBounds(165, 110, 65, 30);
-        this.saveButton.addActionListener(this);
-
-        this.loadButton = new JButton();
-        this.loadButton.setText("Load");
-        this.loadButton.setSize(50, 30);
-        this.loadButton.setBounds(165, 110, 65, 30);
-        this.loadButton.addActionListener(this);
-
-        this.addNodeButton = new JButton();
-        this.addNodeButton.setText("Add Node");
-        this.addNodeButton.setSize(50, 30);
-        this.addNodeButton.setBounds(165, 110, 65, 30);
-        this.addNodeButton.addActionListener(this);
-
-        this.removeNodeButton = new JButton();
-        this.removeNodeButton.setText("Remove Node");
-        this.removeNodeButton.setSize(50, 30);
-        this.removeNodeButton.setBounds(165, 110, 65, 30);
-        this.removeNodeButton.addActionListener(this);
-
-        this.addEdgeButton = new JButton();
-        this.addEdgeButton.setText("Add Edge");
-        this.addEdgeButton.setSize(50, 30);
-        this.addEdgeButton.setBounds(165, 110, 65, 30);
-        this.addEdgeButton.addActionListener(this);
-
-        this.removeEdgeButton = new JButton();
-        this.removeEdgeButton.setText("Remove Edge");
-        this.removeEdgeButton.setSize(50, 30);
-        this.removeEdgeButton.setBounds(165, 110, 65, 30);
-        this.removeEdgeButton.addActionListener(this);
-
-        this.shortestPathButton = new JButton();
-        this.shortestPathButton.setText("Shortest Distance Way");
-        this.shortestPathButton.setSize(50, 30);
-        this.shortestPathButton.setBounds(165, 110, 65, 30);
-        this.shortestPathButton.addActionListener(this);
-
-        this.shortestPathDistButton = new JButton();
-        this.shortestPathDistButton.setText("Shortest Distance");
-        this.shortestPathDistButton.setSize(50, 30);
-        this.shortestPathDistButton.setBounds(165, 110, 65, 30);
-        this.shortestPathDistButton.addActionListener(this);
     }
 
     private double minX() {
@@ -339,38 +253,8 @@ public class graphWindow extends JFrame implements ActionListener {
         return this.height * (this.maxY - y) / (this.maxY - this.minY);
     }
 
-    private double factorX(double w) {
-        return w * this.width / Math.abs(this.maxX - this.minX);
-    }
-
-    private double factorY(double h) {
-        return h * this.height / Math.abs(this.maxY - this.minY);
-    }
-
-    private double userX(double x) {
-        return this.minX + x * (this.maxX - this.minX) / this.width;
-    }
-
-    private double userY(double y) {
-        return this.maxY - y * (this.maxY - this.minY) / this.height;
-    }
-
-    private void scaleGraph() {
-        Iterator<NodeData> iterator = this.graph.nodeIter();
-        while (iterator.hasNext()) {
-            NodeData currNode = iterator.next();
-            GeoLocation currGeo = currNode.getLocation();
-            double newX = (double) (this.width - 100) * ((double) currGeo.x() - this.minX) / (this.maxX - this.minX) + 30;
-            double newY = (double) (this.height - 200) * ((double) currGeo.y() - this.minY) / (this.maxY - this.minY) + 30;
-            GeoLocation newGeo = new myGeo(newX, newY, 0);
-            currNode.setLocation(newGeo);
-        }
-
-    }
-
-    private void createMenuBar() {
-        this.menu = new JMenuBar();
-        this.add(menu);
+    private void createMenu() {
+        this.mb = new JMenuBar();
         this.saveLoad = new JMenu("Save/Load");
         this.saveLoad.addActionListener(this);
         this.saveLoad.setVerticalAlignment(JMenu.TOP);
@@ -378,16 +262,13 @@ public class graphWindow extends JFrame implements ActionListener {
         this.load.addActionListener(this);
         this.save = new JMenuItem("Save to JSON");
         this.save.addActionListener(this);
+        this.saveLoad.add(load);
+        this.saveLoad.add(save);
+        this.mb.add(saveLoad);
+
         this.editGraph = new JMenu("Edit graph");
         this.editGraph.addActionListener(this);
         this.editGraph.setVerticalAlignment(JMenu.TOP);
-        this.algorithm = new JMenu("Algorithm");
-        this.algorithm.addActionListener(this);
-        this.saveLoad.add(load);
-        this.saveLoad.add(save);
-        this.menu.add(saveLoad);
-        this.menu.add(editGraph);
-        this.menu.add(algorithm);
         this.removeNode = new JMenuItem("Remove Node");
         this.removeNode.addActionListener(this);
         this.addNode = new JMenuItem("Add Node");
@@ -400,6 +281,11 @@ public class graphWindow extends JFrame implements ActionListener {
         this.editGraph.add(addNode);
         this.editGraph.add(removeEdge);
         this.editGraph.add(addEdge);
+        this.mb.add(editGraph);
+
+        this.algorithm = new JMenu("Algorithm");
+        this.algorithm.addActionListener(this);
+        this.algorithm.setVerticalAlignment(JMenu.TOP);
         this.isConnected = new JMenuItem("Is Connected?");
         this.isConnected.addActionListener(this);
         this.shortestPath = new JMenuItem("Shorted Path");
@@ -412,81 +298,56 @@ public class graphWindow extends JFrame implements ActionListener {
         this.algorithm.add(shortestPath);
         this.algorithm.add(center);
         this.algorithm.add(tsp);
-        this.algorithm.setVerticalAlignment(JMenu.TOP);
-//        this.panel = new JPanel();
-//        this.panel.setLayout(null);
-//        this.loadButton = new JButton("Load");
-        JTextField loadText = new JTextField();
-        JLabel loadLabel = new JLabel("Enter path to load:");
-        loadText.setBounds(50, 50, 100, 20);
-        loadLabel.setBounds(50, 100, 50, 20);
+        this.mb.add(algorithm);
+        addButtons();
+        this.setJMenuBar(mb);
+    }
 
-//        this.miniLabel = new JLabel();
-//        this.miniPanel = new JPanel();
-//        this.miniFrame = new JFrame();
-//        this.miniFrame.setSize(600, 300);
-
+    private void addButtons() {
         this.saveLoadFromUser = new JTextField(30);
         this.aFromUser = new JTextField(3);
         this.bFromUser = new JTextField(3);
         this.cFromUser = new JTextField(3);
 
-        this.saveButton = new JButton();
-        this.saveButton.setText("Save");
+        this.saveButton = new JButton("Save");
         this.saveButton.setSize(50, 30);
         this.saveButton.setBounds(165, 110, 65, 30);
         this.saveButton.addActionListener(this);
 
-        this.loadButton = new JButton();
-        this.loadButton.setText("Load");
+        this.loadButton = new JButton("Load");
         this.loadButton.setSize(50, 30);
         this.loadButton.setBounds(165, 110, 65, 30);
         this.loadButton.addActionListener(this);
 
-        this.addNodeButton = new JButton();
-        this.addNodeButton.setText("Add Node");
+        this.addNodeButton = new JButton("Add Node");
         this.addNodeButton.setSize(50, 30);
         this.addNodeButton.setBounds(165, 110, 65, 30);
         this.addNodeButton.addActionListener(this);
 
-        this.removeNodeButton = new JButton();
-        this.removeNodeButton.setText("Remove Node");
+        this.removeNodeButton = new JButton("Remove Node");
         this.removeNodeButton.setSize(50, 30);
         this.removeNodeButton.setBounds(165, 110, 65, 30);
         this.removeNodeButton.addActionListener(this);
 
-        this.addEdgeButton = new JButton();
-        this.addEdgeButton.setText("Add Edge");
+        this.addEdgeButton = new JButton("Add Edge");
         this.addEdgeButton.setSize(50, 30);
         this.addEdgeButton.setBounds(165, 110, 65, 30);
         this.addEdgeButton.addActionListener(this);
 
-        this.removeEdgeButton = new JButton();
-        this.removeEdgeButton.setText("Remove Edge");
+        this.removeEdgeButton = new JButton("Remove Edge");
         this.removeEdgeButton.setSize(50, 30);
         this.removeEdgeButton.setBounds(165, 110, 65, 30);
         this.removeEdgeButton.addActionListener(this);
 
-        this.shortestPathButton = new JButton();
-        this.shortestPathButton.setText("Shortest Path");
+        this.shortestPathButton = new JButton("Shortest Path");
         this.shortestPathButton.setSize(50, 30);
         this.shortestPathButton.setBounds(165, 110, 65, 30);
         this.shortestPathButton.addActionListener(this);
 
-
-        this.label = new JLabel("Click the menu bar to choose function");
-//        this.label.setBounds(30, 400, (this.screenSize.width / 2) - 30, (this.screenSize.height / 2) - 270);
-//        this.panel.add(label);
-//        panel.add(loadButton);
-//        panel.add(loadText);
-//        panel.add(loadLabel);
-        //      this.add(panel);
-
-        this.panel.add(label);
-        this.panel.setNew();
-        this.panel.repaint();
-//        this.add(panel);
-
+        this.addNodeForTSP = new JButton("Add Node");
+        this.addNodeForTSP.addActionListener(this);
+        this.doneTSP = new JButton("Done");
+        this.doneTSP.addActionListener(this);
     }
 
     //     all the different actions
@@ -503,14 +364,12 @@ public class graphWindow extends JFrame implements ActionListener {
             this.miniPanel.add(saveButton);
             this.miniFrame.add(this.miniPanel);
             this.miniFrame.setVisible(true);
-
 //             the save button action
         } else if (e.getSource() == saveButton) {
             this.miniFrame.dispose();
             String g1 = saveLoadFromUser.getText();
             this.algo.save(g1);
-
-//             the add Node action
+//             the load action
         } else if (e.getSource() == this.load) {
             this.miniPanel.removeAll();
             saveLoadFromUser.setText("");
@@ -520,24 +379,19 @@ public class graphWindow extends JFrame implements ActionListener {
             this.miniPanel.add(loadButton);
             this.miniFrame.add(this.miniPanel);
             this.miniFrame.setVisible(true);
+//             the load button action
         } else if (e.getSource() == this.loadButton) {
             this.miniFrame.dispose();
-            String g1 = aFromUser.getText();
+            String g1 = saveLoadFromUser.getText();
             this.algo.load(g1);
             this.graph = this.algo.getGraph();
-            panel.setNew();
-            this.repaint();
-
-
-//            this.miniPanel.removeAll();
-//            this.miniFrame.dispose();
-//            String txt = saveLoadFromUser.getText();
-//            this.algo.load(txt);
-//            this.graph = this.algo.getGraph();
-//            this.miniPanel.add(new myPanel());
-//            this.miniFrame.add(miniPanel);
-//            this.miniFrame.add(this.miniPanel);
-//            this.miniFrame.setVisible(true);
+            this.algo.init(this.graph);
+            this.label.setText("Graph has been loaded");
+            this.panel.add(label);
+            this.panel.update();
+            this.panel.repaint();
+            this.add(panel);
+//             the add node action
         } else if (e.getSource() == this.addNode) {
             this.miniPanel.removeAll();
             aFromUser.setText("");
@@ -553,45 +407,17 @@ public class graphWindow extends JFrame implements ActionListener {
 
 //             the add Node button action
         } else if (e.getSource() == addNodeButton) {
-//            miniPanel.removeAll();
-//            this.xForGeo = Double.parseDouble(this.aFromUser.getText());
-//            this.yForGeo = Double.parseDouble(this.bFromUser.getText());
-//            NodeData node = new myNode();
-//            node.setLocation(new myGeo((double) xForGeo, (double) yForGeo, (double) 0));
-//            this.graph.addNode(node);
-//            this.miniFrame.dispose();
-//            this.miniLabel.setText("Node " + node.getKey() + " was added succesfully!");
-//            this.miniPanel.add(miniLabel);
-//            this.miniFrame.add(miniPanel);
-//            this.panel.setNew();
-//            this.panel.repaint();
-//            this.miniFrame.setLocationRelativeTo(this);
-//            this.miniFrame.setVisible(true);
-
-
-            textValue1 = (Double) Double.parseDouble(aFromUser.getText());
-            textValue2 = (Double) Double.parseDouble(bFromUser.getText());
+            textValue1 = Double.parseDouble(aFromUser.getText());
+            textValue2 = Double.parseDouble(bFromUser.getText());
             GeoLocation temp = new myGeo(textValue1, textValue2, 1);
-            if (temp != null) {
-                NodeData tempNode = new myNode(this.graph.nodeSize(), temp);
-                this.graph.addNode(tempNode);
-                this.miniFrame.dispose();
-                this.label.setText("Node " + tempNode.getKey() + " was added succesfully!");
-                this.panel.add(label);
-                panel.setNew();
-                panel.repaint();
-                this.add(panel);
-                System.out.println(this.graph.nodeSize());
-            } else {
-                this.miniFrame.dispose();
-                this.label.setText("Please enter X and Y to add a node");
-                this.panel.add(label);
-                panel.setNew();
-                panel.repaint();
-                this.add(panel);
-                System.out.println(this.graph.nodeSize());
-            }
-
+            NodeData tempNode = new myNode(this.graph.nodeSize(), temp);
+            this.graph.addNode(tempNode);
+            this.miniFrame.dispose();
+            this.label.setText("Node " + tempNode.getKey() + " was added succesfully!");
+            this.panel.add(label);
+            panel.update();
+            panel.repaint();
+            this.add(panel);
 
 //             the remove Node action
         } else if (e.getSource() == this.removeNode) {
@@ -609,27 +435,6 @@ public class graphWindow extends JFrame implements ActionListener {
 
 //             the remove Node button action
         } else if (e.getSource() == this.removeNodeButton) {
-//            this.miniPanel.removeAll();
-//            this.textValue1 = Integer.parseInt(this.aFromUser.getText());
-//            if (this.graph.getNode((int)textValue1) == null) {
-//                this.miniLabel.setText("There is no such node");
-//                this.miniFrame.dispose();
-//                this.miniPanel.add(this.miniLabel);
-//                this.miniFrame.add(miniPanel);
-//                this.miniFrame.setLocationRelativeTo(this);
-//                this.miniFrame.setVisible(true);
-//            } else {
-//                this.miniLabel.setText(("Node " + (int)textValue1 + " was removed"));
-//                this.graph.removeNode((int)textValue1);
-//                this.miniFrame.dispose();
-//                panel.setNew();
-//                panel.repaint();
-//                this.miniPanel.add(this.miniLabel);
-//                this.miniFrame.add(miniPanel);
-//                this.miniFrame.setLocationRelativeTo(this);
-//                this.miniFrame.setVisible(true);
-//            }
-
             textValue1 = Integer.parseInt(aFromUser.getText());
             NodeData removed = this.graph.removeNode((int) textValue1);
             if (removed == null) {
@@ -641,11 +446,10 @@ public class graphWindow extends JFrame implements ActionListener {
                 this.graph.edgeSize();
                 this.miniFrame.dispose();
                 label.setText("Vertex was removed");
-                panel.setNew();
+                panel.update();
                 panel.repaint();
                 this.add(panel);
                 System.out.println(this.graph.nodeSize());
-
             }
 
 //             the add Edge action
@@ -677,9 +481,9 @@ public class graphWindow extends JFrame implements ActionListener {
             this.miniPanel.removeAll();
             this.label.setText("Edge has been added!");
             this.panel.add(label);
-            this.panel.setNew();
+            this.panel.update();
             this.panel.repaint();
-            this.add(panel);
+//            this.add(panel);
 
 //             the remove Edge action
         } else if (e.getSource() == this.removeEdge) {
@@ -710,35 +514,39 @@ public class graphWindow extends JFrame implements ActionListener {
                 this.graph.removeEdge((int) textValue1, (int) textValue2);
                 this.label.setText("The EDGE has been removed");
                 this.panel.add(this.label);
-                panel.setNew();
+                panel.update();
                 panel.repaint();
                 this.add(panel);
-
             }
 
 //             the is connected action
         } else if (e.getSource() == this.isConnected) {
+            this.panel.update();
             this.miniPanel.removeAll();
-            this.miniLabel.setBounds(120, 50, 200, 50);
             if (this.algo.isConnected()) {
-                this.miniLabel.setText("The graph is connected!");
+                this.label.setText("The graph is connected!");
             } else {
-                this.miniLabel.setText("The graph is NOT connected!");
+                this.label.setText("The graph is NOT connected!");
             }
-            this.miniPanel.add(miniLabel);
-            this.add(miniPanel);
-            this.miniFrame.add(miniPanel);
-            this.miniFrame.setSize(400, 200);
-            this.miniFrame.setLocationRelativeTo(this);
-            this.miniFrame.setVisible(true);
+            this.panel.add(label);
+            this.add(panel);
 
 //             the center action
         } else if (e.getSource() == this.center) {
             this.miniPanel.removeAll();
-            this.centerNode = this.algo.center().getKey();
-            this.label.setText("The center source number is " + this.centerNode);
+            this.panel.update();
+            NodeData tmpNode = this.algo.center();
+            if (tmpNode != null) {
+                this.panel.centerNode = this.algo.center().getKey();
+                this.label.setText("The center source number is " + this.panel.centerNode);
+            } else {
+                if (!this.algo.isConnected()) {
+                    this.label.setText("The graph is not connected so there is not a center");
+                } else {
+                    this.label.setText("The graph is empty");
+                }
+            }
             this.panel.add(label);
-            this.panel.setNew();
             this.panel.repaint();
             this.add(panel);
 
@@ -748,7 +556,6 @@ public class graphWindow extends JFrame implements ActionListener {
             aFromUser.setText("");
             bFromUser.setText("");
             this.miniLabel.setText("Enter first SRC and than DEST to find the shortest path and the distance:");
-            this.miniLabel.setBounds(100, 30, 400, 20);
             this.algo.init(this.graph);
             this.miniPanel.add(shortestPathButton);
             this.miniPanel.add(miniLabel);
@@ -758,27 +565,6 @@ public class graphWindow extends JFrame implements ActionListener {
             this.miniFrame.setLocationRelativeTo(this);
             this.miniFrame.setVisible(true);
 
-////             the shortest path distance button action
-//        } else if (e.getSource() == this.shortestPathDistButton) {
-//            this.miniFrame.dispose();
-//            textValue1 = Integer.parseInt(aFromUser.getText());
-//            textValue2 = Integer.parseInt(bFromUser.getText());
-//            if (this.graph.getNode((int) textValue1) == null) {
-//                this.miniLabel.setText("there is no such src");
-//            }
-//            if (this.graph.getNode((int) textValue2) == null) {
-//                this.miniLabel.setText("there is no such dest");
-//            }
-//            this.miniPanel.removeAll();
-//            double distance = this.algo.shortestPathDist((int) textValue1, (int) textValue2);
-//            this.miniLabel.setText("The shortest Distance between Node " + textValue1
-//                    + " and Node " + textValue2 + " is " + distance);
-//            this.miniLabel.setBounds(100, 30, 400, 20);
-//            this.miniPanel.add(miniLabel);
-//            this.miniFrame.add(miniPanel);
-//            this.miniFrame.setLocationRelativeTo(this);
-//            this.miniFrame.setVisible(true);
-
 //             the shortest path button action
         } else if (e.getSource() == this.shortestPathButton) {
             this.miniFrame.dispose();
@@ -787,64 +573,76 @@ public class graphWindow extends JFrame implements ActionListener {
             if (this.algo.shortestPath((int) textValue1, (int) textValue2) == null) {
                 this.label.setText("There is no path between " + textValue1 + " and " + textValue2);
                 this.panel.add(label);
-                this.add(panel);
+                this.panel.update();
+                this.panel.repaint();
             } else {
                 this.shortestWay = this.algo.shortestPath((int) textValue1, (int) textValue2);
+                StringBuilder res = new StringBuilder();
+                for (NodeData nodeData : this.shortestWay) {
+                    res.append(nodeData.getKey()).append(" ");
+                }
                 this.panel.makeShortestWay((ArrayList<NodeData>) this.shortestWay);
                 double distance = this.algo.shortestPathDist((int) textValue1, (int) textValue2);
-                this.label.setText("The shortest path between " + textValue1 + " and " + textValue2 + " is " + distance);
+                this.label.setText("The shortest path between " + textValue1 + " and " + textValue2 + " is " +
+                        res + "\n and the distance is " + distance);
                 this.panel.add(label);
-                this.panel.setNew();
+
                 this.panel.repaint();
-                this.add(panel);
             }
-
-
-//
-//            this.miniFrame.dispose();
-//            textValue1 = Integer.parseInt(aFromUser.getText());
-//            textValue2 = Integer.parseInt(bFromUser.getText());
-//            if (this.graph.getNode((int) textValue1) == null) {
-//                this.label.setText("there is no such src");
-//            }
-//            if (this.graph.getNode((int) textValue2) == null) {
-//                this.label.setText("there is no such dest");
-//            }
-//            if (this.algo.shortestPath((int) textValue1, (int) textValue2) == null) {
-//                this.label.setText("there is no path between those two nodes");
-//            }
-//            this.miniPanel.removeAll();
-//            if (this.graph.getNode((int) textValue1) != null && this.graph.getNode((int) textValue2) != null &&
-//                    this.algo.shortestPath((int) textValue1, (int) textValue2) != null) {
-//                java.util.List<NodeData> wayNodes = this.algo.shortestPath((int) textValue1, (int) textValue2);
-//                String txt = "The Shortest Way Is ";
-//                for (int i = 0; i < wayNodes.size(); i++) {
-//                    txt += wayNodes.get(i).getKey() + " ";
-//                }
-//                this.miniLabel.setText(txt);
-//            }
-//            this.miniPanel.add(miniLabel);
-//            this.miniFrame.add(miniPanel);
-//            this.miniFrame.setLocationRelativeTo(this);
-//            this.miniFrame.setVisible(true);
-
+            this.add(panel);
 //             the TSP button action
         } else if (e.getSource() == this.tsp) {
-//            this.miniPanel.removeAll();
-//            if(this.algo.isConnected()){
-//                java.util.List<NodeData> citiesNodes = this.algo.tsp();
-//            }else{
-//                this.miniLabel.setText("The graph is no connected so there is not a way to visit all cities.");
-//            }
+            this.miniPanel.removeAll();
+            this.miniLabel.setText("Add cities to the TSP. Click done when you had enough");
+            this.aFromUser.setText("");
+            this.miniPanel.add(miniLabel);
+            this.miniPanel.add(aFromUser);
+            this.miniPanel.add(addNodeForTSP);
+            this.miniPanel.add(this.doneTSP);
+            this.miniFrame.add(this.miniPanel);
+            this.miniFrame.setLocationRelativeTo(this);
+            this.miniFrame.setVisible(true);
+        } else if (e.getSource() == this.addNodeForTSP) {
+            textValue1 = Integer.parseInt(aFromUser.getText());
+            NodeData tmp = this.graph.getNode((int) textValue1);
+            if (!tspList.contains(tmp) && tmp != null) {
+                this.miniLabel.setText("Great! You can continue adding cities, or click Done");
+                tspList.add(tmp);
+            } else {
+                this.miniLabel.setText("Please add a valid node or click Done");
+            }
+            StringBuilder res = new StringBuilder();
+            for (NodeData nodeData : tspList) {
+                res.append(nodeData.getKey()).append(" ");
+            }
+            System.out.println(res);
+            this.aFromUser.setText("");
+            this.miniFrame.add(this.miniPanel);
+            this.miniFrame.setLocationRelativeTo(this);
+            this.miniFrame.setVisible(true);
+        } else if (e.getSource() == this.doneTSP) {
+            ArrayList<NodeData> resultTsp = (ArrayList<NodeData>) this.algo.tsp(this.tspList);
+            StringBuilder res = new StringBuilder();
+            for (NodeData nodeData : resultTsp) {
+                res.append(nodeData.getKey()).append(" ");
+            }
+
+            while (!this.tspList.isEmpty()) {
+                this.tspList.remove(0);
+            }
+            this.miniFrame.dispose();
+            this.label.setText("TSP - " + res);
+            this.panel.add(label);
+            this.panel.update();
+            this.panel.repaint();
+            this.add(panel);
         }
     }
-
 
     public static void main(String[] args) {
         DirectedWeightedGraphAlgorithms algo = new DWGraphAlgorithms();
         try {
-            algo.load("/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G1.json");
-            DWGraph graph = (DWGraph) algo.getGraph();
+            algo.load("/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G3.json");
             new graphWindow(algo);
         } catch (Exception e) {
             System.out.println("fail");
