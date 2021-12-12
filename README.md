@@ -49,7 +49,7 @@ Representing all the algorithms that will run on the graph with those methods:
 Download the project.
 Open the Terminal / CMD in this directory:
 /Users/IdeaProjects/Ex2_Graph_Algo/out/artifacts/Ex2_Graph_Algo_jar
-java -jar Ex2_Graph_Algo_jar
+java -jar Ex2_Graph_Algo_jar filePath
 
 ![terminalAlgo](https://user-images.githubusercontent.com/84914845/145723802-bf6b210b-e1aa-4395-adce-d1f28b0aceb5.jpg)
 
