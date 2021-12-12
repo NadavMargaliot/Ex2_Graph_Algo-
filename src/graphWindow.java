@@ -643,6 +643,7 @@ public class graphWindow extends JFrame implements ActionListener {
         DirectedWeightedGraphAlgorithms algo = new DWGraphAlgorithms();
         try {
             algo.load("/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G3.json");
+            String saveGraph = "/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/graph.json";
             new graphWindow(algo);
         } catch (Exception e) {
             System.out.println("fail");
