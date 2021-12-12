@@ -168,7 +168,7 @@ public class graphWindow extends JFrame implements ActionListener {
     }
 
 
-    public graphWindow(DirectedWeightedGraphAlgorithms algorithm) throws HeadlessException {
+    public graphWindow(DirectedWeightedGraphAlgorithms myAlgo) throws HeadlessException {
         super();
         this.miniLabel = new JLabel();
         this.miniPanel = new JPanel();
@@ -176,7 +176,7 @@ public class graphWindow extends JFrame implements ActionListener {
         this.label = new JLabel("Click the menu bar to choose function");
         this.label.setBounds(width / 2, height, width / 2, height);
         this.miniFrame.setSize(200, 100);
-        this.algo = algorithm;
+        this.algo = myAlgo;
         this.graph = algo.getGraph();
         this.miniPanel.setSize(400, 200);
         this.miniFrame.setSize(500, 200);
@@ -367,8 +367,8 @@ public class graphWindow extends JFrame implements ActionListener {
 //             the save button action
         } else if (e.getSource() == saveButton) {
             this.miniFrame.dispose();
-            String g1 = saveLoadFromUser.getText();
-            this.algo.save(g1);
+            String currGraph = saveLoadFromUser.getText();
+            this.algo.save(currGraph);
 //             the load action
         } else if (e.getSource() == this.load) {
             this.miniPanel.removeAll();
@@ -382,8 +382,8 @@ public class graphWindow extends JFrame implements ActionListener {
 //             the load button action
         } else if (e.getSource() == this.loadButton) {
             this.miniFrame.dispose();
-            String g1 = saveLoadFromUser.getText();
-            this.algo.load(g1);
+            String currGraph = saveLoadFromUser.getText();
+            this.algo.load(currGraph);
             this.graph = this.algo.getGraph();
             this.algo.init(this.graph);
             this.label.setText("Graph has been loaded");

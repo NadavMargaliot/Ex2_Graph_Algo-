@@ -12,7 +12,7 @@ public class Ex2 {
      * @return
      */
     public static DirectedWeightedGraph getGrapg(String json_file) {
-        DirectedWeightedGraph ans;
+        DirectedWeightedGraph ans = null;
         DirectedWeightedGraphAlgorithms algo = new DWGraphAlgorithms();
         algo.load(json_file);
         ans = algo.getGraph();
@@ -27,7 +27,7 @@ public class Ex2 {
      * @return
      */
     public static DirectedWeightedGraphAlgorithms getGrapgAlgo(String json_file) {
-        DirectedWeightedGraphAlgorithms ans;
+        DirectedWeightedGraphAlgorithms ans = null;
         ans = new DWGraphAlgorithms();
         ans.load(json_file);
         DirectedWeightedGraph graph = ans.getGraph();
@@ -48,9 +48,9 @@ public class Ex2 {
     }
 
     public static void main(String[] args) {
-        String G1 = "/Users/adielbenmeir/IdeaProjects/Ex2_Graph_Algo/data/G1.json";
-        getGrapg(G1);
-        getGrapgAlgo(G1);
-        runGUI(G1);
+        String myJson = args[0];
+        getGrapg(myJson);
+        getGrapgAlgo(myJson);
+        runGUI(myJson);
     }
 }

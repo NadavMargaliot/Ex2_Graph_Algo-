@@ -302,7 +302,7 @@ public class DWGraphAlgorithms implements DirectedWeightedGraphAlgorithms {
             AllObj.add("Edges", Edges);
             for (NodeData i : nodeArray) {
                 nodeObject = new JsonObject();
-                String s = "" + i.getLocation().x() + "," + i.getLocation().y() + "," + i.getLocation().z();
+                String s = "" + i.getLocation().x()+","+i.getLocation().y()+","+i.getLocation().z();
 
                 nodeObject.addProperty("pos", s);
                 nodeObject.addProperty("id", i.getKey());
