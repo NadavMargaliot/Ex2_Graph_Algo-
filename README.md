@@ -42,8 +42,17 @@ Representing all the algorithms that will run on the graph with those methods:
 ### Example of Center on G3 graph:
 #### The center node colred red (40).
 ![G3_center](https://user-images.githubusercontent.com/84914845/145716265-80942b21-cf4d-4a66-a9f8-a698281aa321.jpg)
-### Table Run Time For Algorithms:
+### Algorithm Run Time:
 ![algorithms_run_time](https://user-images.githubusercontent.com/84914845/145717845-48549a5f-5ee1-4324-85f4-dade33766c96.png)
+
+### Running The Program With Terminal / CMD:
+Download the project.
+Open the Terminal / CMD in this directory:
+/Users/IdeaProjects/Ex2_Graph_Algo/out/artifacts/Ex2_Graph_Algo_jar
+java -jar Ex2_Graph_Algo_jar
+
+![terminalAlgo](https://user-images.githubusercontent.com/84914845/145720835-d1789fec-498f-4cc0-90df-9d205c3ce961.png)
+
 
 
 
