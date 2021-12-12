@@ -26,8 +26,8 @@ Representing a graph with those methods:
 ### DWGraphAlgorithms:
 Representing all the algorithms that will run on the graph with those methods:
 #### Is connected.
-#### Shortest path distance.
-#### Shortest path nodes.
+#### Shortest path distance - Dijkstra.
+#### Shortest path nodes - Dijkstra.
 #### Center.
 #### TSP.
 #### Save to JSON.
