@@ -6,7 +6,7 @@ The main task of this project is to run algorithms on a graph and visual it with
 We built a menu that the user can run a bunch of cool algorithms on the graph and can see it on the screen.
 The user can also do other stuff like add node or removing one and more.
 
-##The classes in this project:
+## The classes in this project:
 ### MyNode:
 Representing a node in the graph.
 ### MyEdge:
