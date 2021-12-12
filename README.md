@@ -34,4 +34,15 @@ Representing all the algorithms that will run on the graph with those methods:
 #### Load from JSON.
 ### GraphWindow:
 #### Representing the Gui.
+### G1 graph in our GUI:
+![G1_regular](https://user-images.githubusercontent.com/84914845/145716216-b1a5f08a-d0ea-4abb-bfc9-b52d25b2afbc.jpg)
+### Example of Shortest Path on G2 graph:
+#### The Shortest Path colored green.
+![G2_shortest_path](https://user-images.githubusercontent.com/84914845/145716249-97e5b30a-7525-4066-8cb7-1613c0acc96c.jpg)
+### Example of Center on G3 graph:
+#### The center node colred red.
+![G3_center](https://user-images.githubusercontent.com/84914845/145716265-80942b21-cf4d-4a66-a9f8-a698281aa321.jpg)
+
+
+
 
