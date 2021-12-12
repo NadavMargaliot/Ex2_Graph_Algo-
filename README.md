@@ -11,9 +11,9 @@ Representing a edge bewteen two nodes in the graph.
 Representing a point3d of the node.
 ### DWGraph:
 Representing a graph with those methods:
-#### Get Node.
-#### Get Edge.
-#### Add Node.
+Get Node.
+Get Edge.
+Add Node.
 #### Connect.
 #### Node Iterator.
 #### Edge Iterator.
