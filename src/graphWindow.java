@@ -102,7 +102,7 @@ public class graphWindow extends JFrame implements ActionListener {
         }
 
 
-        private NodeData NodeLocation(int key) {
+        private NodeData validKey(int key) {
             for (NodeData node : this.nodes) {
                 if (node.getKey() == key)
                     return node;
@@ -127,8 +127,8 @@ public class graphWindow extends JFrame implements ActionListener {
                 g.drawString("" + temp.getKey(), xPixel, yPixel + 25);
             }
             for (EdgeData temp : this.edges) {
-                NodeData currFrom = NodeLocation(temp.getSrc());
-                NodeData currTo = NodeLocation(temp.getDest());
+                NodeData currFrom = validKey(temp.getSrc());
+                NodeData currTo = validKey(temp.getDest());
                 assert currFrom != null;
                 double xFrom = scaleX(currFrom.getLocation().x()) + 10;
                 double yFrom = scaleY(currFrom.getLocation().y()) + 40;
