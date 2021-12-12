@@ -51,7 +51,8 @@ Open the Terminal / CMD in this directory:
 /Users/IdeaProjects/Ex2_Graph_Algo/out/artifacts/Ex2_Graph_Algo_jar
 java -jar Ex2_Graph_Algo_jar
 
-![terminalAlgo](https://user-images.githubusercontent.com/84914845/145723756-8db621ba-8276-46ff-8028-78bacfe8209e.png)
+![terminalAlgo](https://user-images.githubusercontent.com/84914845/145723802-bf6b210b-e1aa-4395-adce-d1f28b0aceb5.jpg)
+
 
 
 
