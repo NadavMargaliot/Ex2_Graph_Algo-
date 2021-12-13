@@ -43,7 +43,7 @@ Representing all the algorithms that will run on the graph with those methods:
 #### The center node colred red (40).
 ![G3_center](https://user-images.githubusercontent.com/84914845/145716265-80942b21-cf4d-4a66-a9f8-a698281aa321.jpg)
 
-## Navigatimg the menu:
+## Navigate the menu:
 When the user will run the program a pop up menu will appear.
 At the menu bar the user will find 3 buttons:
 Save/Load , Edit Graph , Algorithms.
