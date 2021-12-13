@@ -46,7 +46,7 @@ Representing all the algorithms that will run on the graph with those methods:
 ## Navigate the menu:
 When the user will run the program a pop up menu will appear.
 At the menu bar the user will find 3 buttons:
-Save/Load , Edit Graph , Algorithms.
+Save/Load , Edit Graph , Algorithm.
 ### Save/Load:
 #### Save - The program let the user to save a current graph to a JSON file.
 #### Load - The program let the user to load a graph from a JSON file.
@@ -56,7 +56,7 @@ Save/Load , Edit Graph , Algorithms.
 Each edge that is related to the current node will be deleted.
 #### Add Edge - The program let the user to add an edge by inserting two keys of nodes and weight.
 #### Remove Edge - The program let the user to remove an edge by inserting two keys of node.
-### Algorithms:
+### Algorithm:
 #### Is Connected - The program let the user to know if the graph is connected or not.
 #### Center - The program let the user to see the center node if the graph is connected.
 #### Shortest Path - The program let the user to see the shortest path between two nodes and the distance.
