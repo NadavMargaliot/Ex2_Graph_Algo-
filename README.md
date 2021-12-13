@@ -52,7 +52,7 @@ Save/Load , Edit Graph , Algorithm.
 #### Load - The program let the user to load a graph from a JSON file.
 ### Edit Graph:
 #### Add Node - The program let the user to add a node by x and y.
-#### Remove Node- - The program let the userto remove a node by inserting the node key.
+#### Remove Node- - The program let the user to remove a node by inserting the node key.
 Each edge that is related to the current node will be deleted.
 #### Add Edge - The program let the user to add an edge by inserting two keys of nodes and weight.
 #### Remove Edge - The program let the user to remove an edge by inserting two keys of node.
