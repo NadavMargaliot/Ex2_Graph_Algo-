@@ -46,7 +46,7 @@ Representing all the algorithms that will run on the graph with those methods:
 ## Navigate the menu:
 When the user will run the program a pop up menu will appear.
 At the menu bar the user will find 3 buttons:
-Save/Load , Edit Graph , Algorithm.
+Save/Load , Edit Graph and Algorithm.
 ### Save/Load:
 #### Save - The program let the user to save a current graph to a JSON file.
 #### Load - The program let the user to load a graph from a JSON file.
