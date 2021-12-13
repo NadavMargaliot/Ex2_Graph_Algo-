@@ -42,6 +42,27 @@ Representing all the algorithms that will run on the graph with those methods:
 ### Example of Center on G3 graph:
 #### The center node colred red (40).
 ![G3_center](https://user-images.githubusercontent.com/84914845/145716265-80942b21-cf4d-4a66-a9f8-a698281aa321.jpg)
+
+## Navigatimg the menu:
+When the user will run the program a pop up menu will appear.
+At the menu bar the user will find 3 buttons:
+Save/Load , Edit Graph , Algorithms.
+### Save/Load:
+#### Save - The program let the user to save a current graph to a JSON file.
+#### Load - The program let the user to load a graph from a JSON file.
+### Edit Graph:
+#### Add Node - The program let the user to add a node by x and y.
+#### Remove Node- - The program let the userto remove a node by inserting the node key.
+Each edge that is related to the current node will be deleted.
+#### Add Edge - The program let the user to add an edge by inserting two keys of nodes and weight.
+#### Remove Edge - The program let the user to remove an edge by inserting two keys of node.
+### Algorithms:
+#### Is Connected - The program let the user to know if the graph is connected or not.
+#### Center - The program let the user to see the center node if the graph is connected.
+#### Shortest Path - The program let the user to see the shortest path between two nodes and the distance.
+The shortest path will be colored green.
+#### TSP - The program let the user to know the TSP by inserting list of nodes.
+
 ### Algorithm Run Time:
 ![algorithms_run_time](https://user-images.githubusercontent.com/84914845/145717845-48549a5f-5ee1-4324-85f4-dade33766c96.png)
 
