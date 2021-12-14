@@ -34,6 +34,10 @@ Representing all the algorithms that will run on the graph with those methods:
 #### Load from JSON.
 ### GraphWindow:
 #### Representing the Gui.
+
+![Ex2u](https://user-images.githubusercontent.com/84914845/145941410-04976ab8-786a-4b2a-ab4d-02757a23d0f9.png)
+
+
 ### G1 graph in our GUI:
 ![G1_regular](https://user-images.githubusercontent.com/84914845/145716216-b1a5f08a-d0ea-4abb-bfc9-b52d25b2afbc.jpg)
 ### Example of Shortest Path on G2 graph:
